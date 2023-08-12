@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Note MIUI Clone</string>
+    <string name="text_label_1">taxt 1</string>
+    <string name="text_label_2">text 2\n</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tick_box_value">tickbox\n</string>
+    <string name="content_description_tick_box">This is to create note with checkbox\n</string>
+    <string name="brush_value">brush\n</string>
+    <string name="content_description_brush">Create note wiht drawing \n</string>
+    <string name="audio_value">audio\n</string>
+    <string name="content_description_audio">create note with audio recorder\n</string>
+    <string name="image_pick_value">image\n</string>
+    <string name="content_description_image_picker">create note with image captured</string>
+    <string name="note_drawer_item">Notes</string>
+    <string name="archive_drawer_item">Archive\n</string>
+    <string name="deleted_drawer_item">Deleted\n</string>
+    <string name="setting_drawer_item">Settings</string>
+    <string name="lorem_long_text_test">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum suscipit mauris sit amet molestie. Vivamus viverra nisl mauris, vel scelerisque metus venenatis nec.</string>
+    <string name="note_menu_item_share_title">share_text</string>
+    <string name="note_edit_menu_item_share_content_description">share the text of the note item</string>
+    <string name="note_edit_menu_item_theme_content_description">button for changing theme of the note</string>
+    <string name="note_menu_item_theme_title">Theme\n</string>
+    <string name="note_edit_menu_item_delete_content_description">Delete the note \n\n</string>
+    <string name="note_menu_item_delete_title">Delete\n</string>
+    <string name="edit_view_title_hint">Title</string>
+    <string name="note_edit_menu_item_add_content_description">to add new type of note item</string>
+    <string name="note_menu_item_add_title">Add new Item</string>
+    <string name="dialog_main_title_hint_text">Tap \'Enter \' to create subtasks</string>
+
+</resources>

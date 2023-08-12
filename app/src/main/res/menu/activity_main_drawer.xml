@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/note_drawer_item"
+        android:checkable="true"
+        android:icon="@drawable/baseline_light_bulb_24"
+        android:title="@string/note_drawer_item" />
+    <item
+        android:id="@+id/archive_drawer_item"
+        android:checkable="true"
+        android:icon="@drawable/baseline_archive_24"
+        android:title="@string/archive_drawer_item" />
+    <item
+        android:id="@+id/deleted_drawer_item"
+        android:checkable="true"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/deleted_drawer_item" />
+
+    <item
+        android:id="@+id/setting_drawer_item"
+        android:checkable="true"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/setting_drawer_item" />
+
+
+</menu>

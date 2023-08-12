@@ -1,0 +1,14 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.NoteMIUIClone" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <style name="Theme.NoteMIUIClone" parent="Base.Theme.NoteMIUIClone" >
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorSecondary">@color/white</item>
+
+    </style>
+</resources>

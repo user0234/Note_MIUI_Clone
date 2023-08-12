@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="custom_card_view_edit_view" parent="@style/Widget.MaterialComponents.CardView">
+    <item name="shapeAppearanceOverlay">@style/shape_appearance_overlay_edit_view_buttons</item>
+</style>
+    <style name="shape_appearance_overlay_edit_view_buttons" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="boxCornerRadiusTopEnd">17dp</item>
+        <item name="boxCornerRadiusTopStart">17dp</item>
+        <item name="boxCornerRadiusBottomEnd">0dp</item>
+        <item name="boxCornerRadiusBottomStart">0dp</item>
+
+    </style>
+
+    <style name="dialog_edit_text" parent="Widget.Design.TextInputEditText">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="textInputLayoutFocusedRectEnabled">true</item>
+    </style>
+
+</resources>

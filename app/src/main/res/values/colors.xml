@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FCFF55</color>
+    <color name="heading_text_color">#111111</color>
+    <color name="sub_heading_text_color">#3B3B3A</color>
+    <color name="label_text_color">#656561</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_main">#DCDCCF</color>
+    <color name="black">#FF000000</color>
+    <color name="reminder_head_line_text_color">#55000000</color>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_share_text"
+        android:contentDescription="@string/note_edit_menu_item_share_content_description"
+        android:icon="@drawable/baseline_share_24"
+        android:title="@string/note_menu_item_share_title"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_item_theme"
+        android:contentDescription="@string/note_edit_menu_item_theme_content_description"
+        android:icon="@drawable/baseline_brush_24"
+        android:title="@string/note_menu_item_theme_title"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_item_delete"
+        android:contentDescription="@string/note_edit_menu_item_delete_content_description"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/note_menu_item_delete_title"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_item_add"
+        android:contentDescription="@string/note_edit_menu_item_add_content_description"
+        android:icon="@drawable/baseline_add_24"
+        android:title="@string/note_menu_item_add_title"
+        app:showAsAction="never" />
+
+</menu>

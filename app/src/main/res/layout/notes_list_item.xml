@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/note_list_item_card_height_unClicked"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:elevation="5dp"
+    android:layout_marginVertical="@dimen/note_list_item_card_margin_vertical_unClicked"
+    android:layout_marginHorizontal="@dimen/note_list_item_card_margin_vertical_unClicked"
+    app:cardCornerRadius="@dimen/note_list_item_card_corner_radius_unClicked">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/note_list_item_ll_margin_horizontal_unClicked"
+        android:layout_marginBottom="@dimen/note_list_item_ll_margin_bottom_unClicked"
+        android:layout_marginTop="@dimen/note_list_item_ll_margin_top_unClicked"
+        android:orientation="vertical"
+        android:id="@+id/ll_note_item"
+        >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/note_list_item_title_size_unClicked"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            tools:text="@string/lorem_long_text_test"
+            />
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/note_list_item_subTitle_size_unClicked"
+            android:textColor="@color/sub_heading_text_color"
+            tools:text="My note description long one lol lol olol  ol o l o l lo l l ol o long one lol lol olol  ol o l o l lo l l ol olong one lol lol olol  ol o l o l lo l l ol o"
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/note_list_item_date_text_size_unClicked"
+            android:textColor="@color/sub_heading_text_color"
+            tools:text="june 21"
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

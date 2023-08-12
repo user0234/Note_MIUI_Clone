@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="note_drawer_item">Notes</string>
+    <string name="setting_drawer_item">Settings</string>
+    <string name="edit_view_title_hint">Title</string>
+</resources>

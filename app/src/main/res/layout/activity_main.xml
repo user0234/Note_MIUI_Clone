@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.mainActivity.MainActivity"
+    >
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/tab_layout"
+        android:layout_gravity="center_horizontal|top"
+        app:tabIndicatorColor="@android:color/transparent"
+
+        >
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:contentDescription="List of Notes and tasks"
+        android:id="@+id/view_pager"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/baseline_add_24"
+        android:backgroundTint="@color/primary"
+        android:layout_gravity="bottom|end"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
