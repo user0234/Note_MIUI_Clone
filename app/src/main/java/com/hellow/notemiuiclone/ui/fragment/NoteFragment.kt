@@ -49,7 +49,6 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         viewModel.getNotes().observe(viewLifecycleOwner) {
             if (it == null) {
                 rvNotes.visibility = View.GONE
-
                 rvEmptyView.visibility = View.VISIBLE
             } else {
                 if (it.isEmpty()) {
@@ -61,7 +60,6 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     rvEmptyView.visibility = View.GONE
                 }
             }
-
         }
 
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(
@@ -75,7 +73,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
             ): Boolean {
                 val position = viewHolder.adapterPosition
                 viewHolder.itemView.clearFocus()
-                return true
+                return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -114,7 +112,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         notesAdapter = NotesAdapter()
         rvNotes.adapter = notesAdapter
         rvNotes.layoutManager = LinearLayoutManager(activity)
-
+        rvNotes.setHasFixedSize(false)
     }
 
 }

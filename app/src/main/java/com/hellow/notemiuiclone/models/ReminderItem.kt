@@ -14,6 +14,8 @@ data class ReminderItem(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val idDate: String,
+
+
     var title: String,
     val itemsList: List<ReminderSubItem>,
     var reminderStatus: ReminderStatus,

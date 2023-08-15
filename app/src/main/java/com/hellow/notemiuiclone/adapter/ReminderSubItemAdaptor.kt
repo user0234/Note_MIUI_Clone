@@ -20,7 +20,7 @@ class ReminderSubItemAdaptor: RecyclerView.Adapter<ReminderSubItemAdaptor.Remind
 
     private val differCallBack = object : DiffUtil.ItemCallback<ReminderSubItem>() {
         override fun areItemsTheSame(oldItem: ReminderSubItem, newItem: ReminderSubItem): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.name == newItem.name || oldItem.isDone == newItem.isDone
         }
 
         override fun areContentsTheSame(oldItem: ReminderSubItem, newItem: ReminderSubItem): Boolean {

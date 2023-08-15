@@ -27,5 +27,6 @@
     <string name="note_edit_menu_item_add_content_description">to add new type of note item</string>
     <string name="note_menu_item_add_title">Add new Item</string>
     <string name="dialog_main_title_hint_text">Tap \'Enter \' to create subtasks</string>
+    <string name="setting_home_menu_item">Setting\n</string>
 
 </resources>

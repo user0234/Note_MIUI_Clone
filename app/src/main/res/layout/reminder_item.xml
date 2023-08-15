@@ -43,6 +43,7 @@
                 android:orientation="vertical"
                 app:layout_constraintStart_toEndOf="@+id/checkBox_main"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 >
 
                 <TextView
@@ -51,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:text="text namre"
                     android:textSize="20sp"
+                    android:layout_weight="1"
                     android:textColor="@color/heading_text_color"
                     android:textStyle="bold" />
 
@@ -59,6 +61,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="text namre"
+                    android:layout_marginTop="5dp"
+                    android:visibility="visible"
                     android:textColor="@color/label_text_color"
                     android:textSize="14sp" />
             </LinearLayout>

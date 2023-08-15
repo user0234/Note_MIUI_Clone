@@ -16,8 +16,16 @@ class MainActivityViewModel(
     app:Application,
     private val notesRepository: NotesRepository,
     private val reminderRepository: ReminderRepository
-):
-    AndroidViewModel(app)  {
+): AndroidViewModel(app)  {
+
+   private var _completeShownTasks = false
+    fun setCompleteShowInTasks(value: Boolean){
+        _completeShownTasks = value
+    }
+
+    fun getCompleteShowInTasks():Boolean {
+        return _completeShownTasks
+    }
 
     private var _tabItemSelected = MutableLiveData<Boolean>(true)
     val tabItemSelectedLiveData: LiveData<Boolean>

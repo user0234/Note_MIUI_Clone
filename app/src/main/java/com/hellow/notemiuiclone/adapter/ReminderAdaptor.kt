@@ -54,7 +54,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
         holder.binding.reminderTitleMain.text = currentItem.title
 
-        if (currentItem.TimerTime == "") {
+        if (currentItem.TimerTime == "Set reminder") {
             holder.binding.reminderTime.visibility = View.GONE
         } else {
             holder.binding.reminderTime.text = currentItem.TimerTime
@@ -99,11 +99,12 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                                it(currentItem,true)
                            }
                        }else{
-                           currentItem.itemsList[subListPosition].isDone = true
+                           reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone = true
                        }
 
                    }else{
                        if(currentItem.checkedCount == currentItem.itemsList.size){
+
                            currentItem.checkedCount = currentItem.checkedCount - 1
                            currentItem.reminderStatus = ReminderStatus.NotDone
                            currentItem.itemsList[subListPosition].isDone = false
@@ -112,8 +113,9 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                                it(currentItem,true)
                            }
                        } else{
-                           currentItem.checkedCount = currentItem.checkedCount - 1
-                           currentItem.itemsList[subListPosition].isDone = false
+                           reminderDiffer.currentList[holder.adapterPosition].checkedCount = currentItem.checkedCount - 1
+                           reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone = false
+
                        }
 
                    }
@@ -157,8 +159,8 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                 currentItem.isExpended = false
                 currentItem.checkedCount = 0
 
-                for (each in currentItem.itemsList){
-                    each.isDone = true
+                currentItem.itemsList.map {
+                    it.isDone = false
                 }
 
                 onItemClickListener?.let {
@@ -171,8 +173,8 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                 currentItem.isExpended = false
                 currentItem.checkedCount = currentItem.itemsList.size
 
-                for (each in currentItem.itemsList){
-                    each.isDone = false
+                currentItem.itemsList.map {
+                    it.isDone = true
                 }
 
                 onItemClickListener?.let {

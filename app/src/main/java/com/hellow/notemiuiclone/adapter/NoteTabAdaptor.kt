@@ -2,28 +2,27 @@ package com.hellow.notemiuiclone.adapter
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.hellow.notemiuiclone.ui.fragment.NoteFragment
 import com.hellow.notemiuiclone.ui.fragment.TaskFragment
 
 
 class NoteTabAdaptor(
-    private val myContext: Context,
-    fm: FragmentManager,
+    fragmentActivity: FragmentActivity,
     private var totalTabs: Int,
-) : FragmentPagerAdapter(fm) {
+) : FragmentStateAdapter(fragmentActivity) {
 
 
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return totalTabs
     }
 
     // this is for fragment tabs
-    override fun getItem(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                //  val homeFragment: HomeFragment = HomeFragment()
+
                 NoteFragment()
             }
 

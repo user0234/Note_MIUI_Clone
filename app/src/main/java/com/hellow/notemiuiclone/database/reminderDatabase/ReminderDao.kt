@@ -25,7 +25,7 @@ interface ReminderDao {
         @Query("Select * From tasks Where reminderStatus =:status")
         fun getStatusReminder(status: ReminderStatus): LiveData<List<ReminderItem>?>
 
-        @Query("Select * From tasks")
+        @Query("Select * From tasks ORDER BY reminderStatus")
         fun getAllReminder(): LiveData<List<ReminderItem>?>
 
 }

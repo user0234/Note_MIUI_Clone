@@ -20,4 +20,22 @@
         <item name="textInputLayoutFocusedRectEnabled">true</item>
     </style>
 
+    <style name="material_dialog" parent="MaterialAlertDialog.Material3">
+         <item name="cornerRadius">15dp</item>
+         <item name="background">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+
+    </style>
+
+    <style name="reminder_timer_set_button_Style" parent="Base.Widget.AppCompat.Button.Borderless">
+
+        <item name="elevation">0dp</item>
+        <item name="iconPadding">8dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+        <item name="android:paddingEnd">5dp</item>
+
+    </style>
+
 </resources>

@@ -3,4 +3,5 @@
     <string name="note_drawer_item">Notes</string>
     <string name="setting_drawer_item">Settings</string>
     <string name="edit_view_title_hint">Title</string>
+    <string name="setting_home_menu_item">Setting\n</string>
 </resources>
