@@ -8,16 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
 import com.hellow.notemiuiclone.ui.editActivity.EditCreateActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
-import com.hellow.notemiuiclone.utils.TestModels.note1
-import com.hellow.notemiuiclone.utils.TestModels.note2
-import com.hellow.notemiuiclone.utils.TestModels.note3
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
 
 class NoteFragment : Fragment(R.layout.fragment_note) {
