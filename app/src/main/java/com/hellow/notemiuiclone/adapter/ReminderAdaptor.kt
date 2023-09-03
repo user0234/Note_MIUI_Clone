@@ -128,13 +128,14 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
         }
 
+
         holder.binding.ivShowListButton.setOnClickListener {
 
             if (currentItem.isExpended) {
 
                 currentItem.isExpended = false
                 holder.binding.ivShowListButton.animate()
-                    .setDuration(400)
+                    .setDuration(40)
                     .rotation(-180F)
                     .start()
                 holder.binding.rvReminderList.visibility = View.VISIBLE
@@ -143,7 +144,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
                 currentItem.isExpended = true
                 holder.binding.ivShowListButton.animate()
-                    .setDuration(400)
+                    .setDuration(40)
                     .rotation(0F)
                     .start()
                 holder.binding.rvReminderList.visibility = View.GONE
@@ -191,7 +192,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                         holder.itemView.animate()
                             .scaleY(0.83F)
                             .scaleX(0.83F)
-                            .setDuration(300)
+                            .setDuration(80)
                             .start()
                     }
 
@@ -199,7 +200,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                         holder.itemView.animate()
                             .scaleX(1F)
                             .scaleY(1F)
-                            .setDuration(300)
+                            .setDuration(80)
                             .start()
                     }
 
@@ -207,7 +208,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                         holder.itemView.animate()
                             .scaleX(1F)
                             .scaleY(1F)
-                            .setDuration(300)
+                            .setDuration(80)
                             .start()
                     }
                 }

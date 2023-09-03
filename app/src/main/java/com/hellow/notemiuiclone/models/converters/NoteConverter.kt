@@ -11,7 +11,6 @@ import com.hellow.notemiuiclone.models.NoteStatus
 class NoteConverter {
 
     private val gson = Gson()
-
     @TypeConverter
     fun fromListNoteDescription(value: List<NoteDescItem>): String {
         return gson.toJson(value)

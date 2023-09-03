@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:orientation="vertical"
         app:contentInsetStart="0dp"
-        android:background="@android:color/transparent"
+        android:background="@color/background_main"
         app:contentInsetStartWithNavigation="0dp"
         app:menu="@menu/home_screen_menu"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-
+                android:backgroundTint="@color/background_main"
+                app:tabIndicatorColor="@color/background_main"
                 >
 
 

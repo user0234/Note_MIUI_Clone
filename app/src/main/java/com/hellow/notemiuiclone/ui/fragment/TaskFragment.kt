@@ -1,28 +1,19 @@
 package com.hellow.notemiuiclone.ui.fragment
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.ReminderAdaptor
-import com.hellow.notemiuiclone.adapter.ReminderSubItemDialogAdaptor
 import com.hellow.notemiuiclone.databinding.FragmentTaskBinding
-import com.hellow.notemiuiclone.databinding.ReminderDialogLayoutBinding
 import com.hellow.notemiuiclone.dialogs.EditReminderDialog
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
-import com.hellow.notemiuiclone.models.ReminderSubItem
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 
@@ -198,6 +189,7 @@ class TaskFragment : Fragment() {
 
     }
 
+    /*
     private fun openReminderEditDialog(currentItem: ReminderItem) {
 
         val dialog = Dialog(requireActivity(), R.style.material_dialog)
@@ -324,6 +316,7 @@ class TaskFragment : Fragment() {
         dialog.show()
     }
 
+    */
     // item touch helper
     private fun setUpItemTouchHelperCompleted() {
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(

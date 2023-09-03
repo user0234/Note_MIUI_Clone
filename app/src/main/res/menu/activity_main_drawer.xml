@@ -15,7 +15,7 @@
     <item
         android:id="@+id/deleted_drawer_item"
         android:checkable="true"
-        android:icon="@drawable/baseline_delete_24"
+        android:icon="@drawable/delete_button_menu_default_theme"
         android:title="@string/deleted_drawer_item" />
 
     <item

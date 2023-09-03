@@ -27,7 +27,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
         }
 
         override fun areContentsTheSame(oldItem: NoteItem, newItem: NoteItem): Boolean {
-            return oldItem == newItem
+            return oldItem.idDate == newItem.idDate && oldItem.recentChangeDate == newItem.recentChangeDate
         }
 
     }
@@ -120,7 +120,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
                         holder.itemView.animate()
                             .scaleY(0.83F)
                             .scaleX(0.83F)
-                            .setDuration(300)
+                            .setDuration(70)
                             .start()
 /*
 
@@ -192,7 +192,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
                         holder.itemView.animate()
                             .scaleX(1F)
                             .scaleY(1F)
-                            .setDuration(300)
+                            .setDuration(70)
                             .start()
                           /*
 //                        currentItem.isClicked = false
@@ -260,7 +260,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
                         holder.itemView.animate()
                             .scaleX(1F)
                             .scaleY(1F)
-                            .setDuration(300)
+                            .setDuration(70)
                             .start()
                             /*
 //                        currentItem.isClicked = false

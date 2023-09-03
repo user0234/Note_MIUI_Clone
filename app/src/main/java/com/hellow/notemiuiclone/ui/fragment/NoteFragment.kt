@@ -3,6 +3,7 @@ package com.hellow.notemiuiclone.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     private lateinit var viewModel: MainActivityViewModel
     lateinit var notesAdapter: NotesAdapter
     lateinit var rvNotes: RecyclerView
-    lateinit var rvEmptyView: MaterialCardView
+    lateinit var rvEmptyView: ConstraintLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,10 +43,6 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
             startActivity(intent)
         }
 
-        viewModel.saveNote(note1)
-        viewModel.saveNote(note2)
-        viewModel.saveNote(note3)
-
         viewModel.getNotes().observe(viewLifecycleOwner) {
             if (it == null) {
                 rvNotes.visibility = View.GONE
@@ -55,6 +52,10 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     rvNotes.visibility = View.GONE
                     rvEmptyView.visibility = View.VISIBLE
                 } else {
+                 // TODO sort it by most recent changed
+                    it.sortedBy { item ->
+                        item.recentChangeDate
+                    }
                     notesAdapter.notesDiffer.submitList(it)
                     rvNotes.visibility = View.VISIBLE
                     rvEmptyView.visibility = View.GONE

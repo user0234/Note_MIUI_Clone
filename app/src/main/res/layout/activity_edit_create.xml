@@ -6,66 +6,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.editActivity.EditCreateActivity">
+
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/edit_delete_note"
+            android:layout_height="match_parent"
             android:background="@android:color/white"
-            />
+            app:menu="@menu/edit_note_menu_theme_2" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar">
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
+        app:layout_constraintVertical_bias="0.0">
+
         <LinearLayout
+            android:id="@+id/ll_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ll_title"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="25dp"
             android:orientation="vertical"
+
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_title"
+                style="@style/Widget.Material3.TextInputEditText.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.Material3.TextInputEditText.FilledBox"
-                tools:text="this is text"
-                android:textSize="30sp"
-                android:textAlignment="textStart"
-                android:inputType="textAutoCorrect"
-                android:textColor="@android:color/black"
                 android:hint="@string/edit_view_title_hint"
-                />
+                android:inputType="textAutoCorrect"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                tools:text="this is text" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_sub_item_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:textColor="@color/sub_heading_text_color"
-                tools:text="26 June 10:50 AM  | 20 characters"
-                />
+                tools:text="26 June 10:50 AM  | 20 characters" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_note_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:listitem="@layout/notes_list_item"
                 android:visibility="visible"
-                />
+                tools:listitem="@layout/notes_list_item" />
         </LinearLayout>
     </ScrollView>
 
@@ -73,67 +75,73 @@
         android:id="@+id/list_background_theme"
         android:layout_width="match_parent"
         android:layout_height="190dp"
+        android:background="@color/background_main"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/theme_list_item"
-        android:visibility="gone"
-        android:background="@color/background_main"
-        />
+        tools:listitem="@layout/theme_list_item" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/description_item_add_item_bar_default_theme"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="60dp"
         android:background="@android:color/holo_green_light"
-        android:id="@+id/add_new_item_card"
-        android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/custom_card_view_edit_view"
-        >
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearanceOverlay="@style/custom_card_view_edit_view">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="5dp"
-            >
-          <androidx.appcompat.widget.AppCompatImageButton
-              android:id="@+id/bt_audio_recorder"
-              android:layout_width="0dp"
-              android:layout_height="70dp"
-              android:layout_weight="1"
-              android:src="@drawable/audio_icon_edit"
-              android:backgroundTint="@color/white"
-              android:clickable="true"
-              />
+            android:layout_marginHorizontal="2dp"
+            android:orientation="horizontal">
+
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/bt_image_picker"
+                android:id="@+id/bt_audio_recorder_theme_default"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:src="@drawable/image_icon"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
-                />
+                android:src="@drawable/audio_add_icon_default_theme" />
+
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/bt_drawing"
+                android:id="@+id/bt_image_picker_theme_default"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:src="@drawable/baseline_draw_24"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
-                />
+                android:src="@drawable/image_add_icon_default_theme" />
+
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/bt_check_box"
+                android:id="@+id/bt_drawing_theme_default"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:src="@drawable/baseline_check_box_24"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
-                />
+                android:src="@drawable/draw_screen_icon_default_theme" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bt_check_box_theme_default"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:src="@drawable/check_box_icon_default_theme" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bt_empty_theme_default"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

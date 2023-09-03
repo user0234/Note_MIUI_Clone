@@ -31,6 +31,7 @@ import com.hellow.notemiuiclone.models.ReminderSubItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
 import com.hellow.notemiuiclone.ui.editActivity.EditCreateActivity
+import com.hellow.notemiuiclone.utils.Utils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -96,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                     .format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
                 val newNote = NoteItem(idDate = noteId, recentChangeDate = noteId)
                 viewModel.saveNote(newNote)
+                intent.putExtra(Utils.NOTE_ITEM_CREATE,newNote)
                 startActivity(intent)
             } else {
                 // create new reminder item using dialogue
@@ -122,6 +124,15 @@ class MainActivity : AppCompatActivity() {
         }
         reminderDialog.show()
     }
+
+
+    private fun createSnackBar(value: String) {
+        Snackbar.make(viewBinding.root, value, Snackbar.LENGTH_LONG).apply {
+            show()
+        }
+    }
+
+    /*
     private fun showCreateDialog() {
 
         val dialog = Dialog(this, R.style.material_dialog)
@@ -237,10 +248,5 @@ class MainActivity : AppCompatActivity() {
         }
         dialog.show()
     }
-
-    private fun createSnackBar(value: String) {
-        Snackbar.make(viewBinding.root, value, Snackbar.LENGTH_LONG).apply {
-            show()
-        }
-    }
+    */
 }

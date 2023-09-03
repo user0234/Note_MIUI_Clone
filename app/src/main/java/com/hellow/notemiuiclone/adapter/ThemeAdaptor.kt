@@ -24,7 +24,7 @@ class ThemeAdaptor : RecyclerView.Adapter<ThemeAdaptor.ThemeViewHolder>() {
     }
 
     val differ = AsyncListDiffer(this, differCallBack)
-    private var currentSelected:Int = 0
+    var currentSelected:Int = 0
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -43,8 +43,8 @@ class ThemeAdaptor : RecyclerView.Adapter<ThemeAdaptor.ThemeViewHolder>() {
 
           holder.binding.ivThemeItem.setBackgroundColor(Color.parseColor(currentItem.backgroundColor))
 
-        if(position == currentSelected){
-            holder.binding.root.strokeWidth = 7
+        if( position== currentSelected){
+            holder.binding.root.strokeWidth = 8
         }else{
             holder.binding.root.strokeWidth = 0
         }

@@ -35,11 +35,9 @@ object Utils {
     val NOTE_ITEM_CREATE = "NoteItemCreate"
 
     val themeListData:List<ThemeItemData> = listOf<ThemeItemData>(
-        ThemeItemData("#f8f9fa","#ced4da"),
-        ThemeItemData("#219ebc","#8ecae6"),
-        ThemeItemData("#5e548e","#9f86c0"),
-        ThemeItemData("#ee9b00","#e9d8a6"),
-        ThemeItemData("#d00000","#e85d04"),
+        ThemeItemData("#F4E2E2","#000000","#33000000"),
+        ThemeItemData( "#ABBCDA","#072963","#333B69DC"),
+
     )
 
     fun getStatusTextColor(value:Boolean):String{
@@ -48,5 +46,9 @@ object Utils {
         }
 
         return "#656561"
+    }
+
+    fun getImage(imageFile: String?): String {
+       return ""
     }
 }

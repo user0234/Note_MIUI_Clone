@@ -8,4 +8,18 @@
     <color name="background_main">#DCDCCF</color>
     <color name="black">#FF000000</color>
     <color name="reminder_head_line_text_color">#55000000</color>
+
+    // empty list notification view
+    <color name="list_no_item_icon_background_color">#5BFFE819</color>
+    <color name="list_no_item_text_color">#43433D</color>
+
+    // theme 1 items
+    <color name="edit_screen_default_theme_item">#FF000000</color>
+
+    // theme 2 items
+    <color name="edit_screen_theme2_menu_color">#072963</color>
+    <color name="edit_screen_theme2_description_item_color">#333B69DC</color>
+
+    // theme 3 items
+
 </resources>
