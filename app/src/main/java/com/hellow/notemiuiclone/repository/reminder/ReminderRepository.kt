@@ -1,9 +1,7 @@
 package com.hellow.notemiuiclone.repository.reminder
 
 import androidx.lifecycle.LiveData
-import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
 import com.hellow.notemiuiclone.database.reminderDatabase.ReminderDatabase
-import com.hellow.notemiuiclone.models.NoteItem
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
 

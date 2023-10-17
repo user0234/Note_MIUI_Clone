@@ -1,9 +1,9 @@
-package com.hellow.notemiuiclone.ui.editActivity
+package com.hellow.notemiuiclone.ui.editActivity1
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hellow.notemiuiclone.models.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 
 class EditCreateViewModelProviderFactory(

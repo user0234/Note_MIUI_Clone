@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.hellow.notemiuiclone.models.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.models.NoteStatus
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
@@ -36,22 +36,21 @@ class MainActivityViewModel(
     }
 
 
-   fun saveNote (note:NoteItem) = viewModelScope.launch {
-        notesRepository.addNote(note)
-   }
+    fun addNote(note: NoteItem) = viewModelScope.launch {
+        notesRepository.createNote(note)
+    }
 
-    fun getNotes() = notesRepository.getAliveNotes()
+    fun getNotes() = notesRepository.getNotes()
 
-    fun deleteNote(note:NoteItem) {
-        note.noteStatus = NoteStatus.Deleted
+    fun deleteNote(note: NoteItem) {
+       // note.noteStatus = NoteStatus.Deleted
         viewModelScope.launch {
             notesRepository.updateNote(note)
         }
     }
 
-    fun archiveNote(note:NoteItem) {
-        note.noteStatus = NoteStatus.Archive
-        viewModelScope.launch {
+    fun archiveNote(note: NoteItem) {
+         viewModelScope.launch {
             notesRepository.updateNote(note)
         }
     }

@@ -47,8 +47,4 @@ object Utils {
 
         return "#656561"
     }
-
-    fun getImage(imageFile: String?): String {
-       return ""
-    }
 }

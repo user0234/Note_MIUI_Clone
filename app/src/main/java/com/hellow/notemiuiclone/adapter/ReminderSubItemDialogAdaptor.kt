@@ -7,13 +7,13 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.hellow.notemiuiclone.databinding.ReminderSubItemDialogBinding
+import com.hellow.notemiuiclone.databinding.DialogReminderSubItemBinding
 import com.hellow.notemiuiclone.models.ReminderSubItem
 
 class ReminderSubItemDialogAdaptor :
     RecyclerView.Adapter<ReminderSubItemDialogAdaptor.ReminderSubItemViewHolder>() {
 
-    inner class ReminderSubItemViewHolder(val binding: ReminderSubItemDialogBinding) :
+    inner class ReminderSubItemViewHolder(val binding: DialogReminderSubItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private val differCallBack = object : DiffUtil.ItemCallback<ReminderSubItem>() {
@@ -34,7 +34,7 @@ class ReminderSubItemDialogAdaptor :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderSubItemViewHolder {
         return ReminderSubItemViewHolder(
-            ReminderSubItemDialogBinding.inflate(
+            DialogReminderSubItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

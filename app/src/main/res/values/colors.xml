@@ -20,6 +20,10 @@
     <color name="edit_screen_theme2_menu_color">#072963</color>
     <color name="edit_screen_theme2_description_item_color">#333B69DC</color>
 
-    // theme 3 items
-
+    <color name="md_blue_gray_700">#1c2733</color>
+    <color name="md_blue_gray_500">#253343</color>
+    <color name="dark_white">#eaeaea</color>
+    <color name="md_yellow_A700">#ffd600</color>
+    <color name="md_grey_100_75">#80F5F5F5</color>
+    <color name="md_grey_100">#f5f5f5</color>
 </resources>

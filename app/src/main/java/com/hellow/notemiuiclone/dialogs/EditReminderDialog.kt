@@ -15,7 +15,7 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.ReminderSubItemDialogAdaptor
-import com.hellow.notemiuiclone.databinding.ReminderDialogLayoutBinding
+import com.hellow.notemiuiclone.databinding.DialogReminderLayoutBinding
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
 import com.hellow.notemiuiclone.models.ReminderSubItem
@@ -25,7 +25,7 @@ abstract class EditReminderDialog(
     private val currentItem: ReminderItem,
 ) : Dialog(context, R.style.material_dialog) {
 
-    private lateinit var binding: ReminderDialogLayoutBinding
+    private lateinit var binding: DialogReminderLayoutBinding
     private lateinit var adaptor: ReminderSubItemDialogAdaptor
     var date:String = ""
     var time:String = ""
@@ -33,7 +33,7 @@ abstract class EditReminderDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = ReminderDialogLayoutBinding.inflate(layoutInflater)
+        binding = DialogReminderLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setCanceledOnTouchOutside(true)
@@ -228,6 +228,5 @@ abstract class EditReminderDialog(
         timePickerDialog.show()
 
     }
-
 
 }

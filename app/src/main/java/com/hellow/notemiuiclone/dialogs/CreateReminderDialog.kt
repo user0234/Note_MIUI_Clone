@@ -15,7 +15,7 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.ReminderSubItemDialogAdaptor
-import com.hellow.notemiuiclone.databinding.ReminderDialogLayoutBinding
+import com.hellow.notemiuiclone.databinding.DialogReminderLayoutBinding
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
 import com.hellow.notemiuiclone.models.ReminderSubItem
@@ -25,21 +25,20 @@ import java.time.format.DateTimeFormatter
 
 abstract class CreateReminderDialog(
     context: Context,
-
     ) : Dialog(context, R.style.material_dialog) {
 
 
-    private lateinit var binding: ReminderDialogLayoutBinding
+    private lateinit var binding: DialogReminderLayoutBinding
     private lateinit var adaptor: ReminderSubItemDialogAdaptor
     var mainTextValue: String = ""
-    var date:String = ""
-    var time:String = ""
+    var date: String = ""
+    var time: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = ReminderDialogLayoutBinding.inflate(layoutInflater)
+        binding = DialogReminderLayoutBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
@@ -82,7 +81,7 @@ abstract class CreateReminderDialog(
         }
         binding.setReminderButton.setOnClickListener {
             // pick date and time for reminder and add a alarm for that time when cancel dialog
-             datePicker()
+            datePicker()
 
         }
 
@@ -117,9 +116,9 @@ abstract class CreateReminderDialog(
         );
 
         // create the new reminder with adding a alarm for that time
-        if(title==""){
+        if (title == "") {
             onItemDone(null)
-        }else {
+        } else {
             onItemDone(reminderItem)
         }
         super.cancel()
@@ -135,7 +134,7 @@ abstract class CreateReminderDialog(
 
                 reminderSubItemList.addAll(adaptor.reminderSubItemDiffer.currentList)
 
-                reminderSubItemList.add(ReminderSubItem("", false,reminderSubItemList.size))
+                reminderSubItemList.add(ReminderSubItem("", false, reminderSubItemList.size))
 
                 adaptor.reminderSubItemDiffer.submitList(reminderSubItemList)
 
@@ -199,7 +198,7 @@ abstract class CreateReminderDialog(
         val datePickerDialog = DatePickerDialog(
             context, { view, year, month, dayOfMonth ->
                 date = "$dayOfMonth-${(month + 1)}-$year"
-                 timePicker(date);
+                timePicker(date);
 
             }, mYear, mMonth, mDay
         )
@@ -208,7 +207,7 @@ abstract class CreateReminderDialog(
 
     }
 
-    private fun timePicker(date:String) {
+    private fun timePicker(date: String) {
 
         val c: Calendar = Calendar.getInstance()
         val mHour = c.get(Calendar.HOUR_OF_DAY)

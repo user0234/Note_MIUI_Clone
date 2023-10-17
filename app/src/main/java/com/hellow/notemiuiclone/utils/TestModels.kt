@@ -1,12 +1,5 @@
 package com.hellow.notemiuiclone.utils
 
-import com.hellow.notemiuiclone.models.NoteDescItem
-import com.hellow.notemiuiclone.models.NoteDescItemType
-import com.hellow.notemiuiclone.models.NoteItem
-import com.hellow.notemiuiclone.models.NoteStatus
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 object TestModels {
 
 //    val note1Desc1:NoteDescItem = NoteDescItem(NoteDescItemType.Text,"text one",false,null)

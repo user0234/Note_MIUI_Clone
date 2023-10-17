@@ -8,14 +8,12 @@
     android:background="@android:color/transparent"
     android:paddingBottom="30dp">
 
-
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:background="@android:color/transparent"
-
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +44,6 @@
                     android:id="@+id/checkBox_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     />
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -56,12 +53,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:hint="@string/dialog_main_title_hint_text"
-                    android:inputType="textMultiLine"
+                    android:inputType="textImeMultiLine"
                     android:textAlignment="textStart"
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
+                    android:maxLines="1"
+                    android:text="sdkjfnskdfjbskdfskdnfskfddfdfgdfgsdfsdfsdfsdfjskdf"
                     app:layout_constrainedWidth="true"
-                    app:layout_constraintTop_toTopOf="parent" />
+                     />
 
             </LinearLayout>
 
@@ -146,7 +145,6 @@
                     android:textColor="@color/primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
-
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.editActivity.CreatEditActivity">
+    <EditText
+        android:id="@+id/remove_focus_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:autofillHints="kjj"
+        android:inputType="text" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/edit_note_menu_default_theme"
+            app:titleTextColor="@color/black" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_tilte_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="vertical"
+                android:transitionName="transition_card"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_title"
+                    style="@style/Widget.Material3.TextInputEditText.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_text_color"
+                    android:inputType="textImeMultiLine"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/black"
+                    android:textSize="30sp"
+                    tools:text="this is text" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:textColor="@color/sub_heading_text_color"
+                    tools:text="26 June 10:50 AM  | 20 characters" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                tools:itemCount="2"
+                tools:listitem="@layout/edit_description_checkbox_item" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/theme_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_background_theme"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/background_main"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            tools:itemCount="6"
+            tools:listitem="@layout/theme_list_item" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/soft_input_about_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_gravity="bottom"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="5dp"
+            >
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bt_audio"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:src="@drawable/baseline_mic_none_24" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bt_check_box"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:src="@drawable/check_box_icon_default_theme" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bt_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:src="@drawable/image_add_icon_default_theme" />
+
+        </LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:visibility="gone"
+                android:id="@+id/audioRecordVisibility"
+                >
+                <com.hellow.notemiuiclone.utils.widget.RecordingWaveformView
+                    android:id="@+id/audioRecordTimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textSize="30sp"
+                    android:src="@drawable/visual"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

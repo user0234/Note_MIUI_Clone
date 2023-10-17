@@ -7,24 +7,21 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.hellow.notemiuiclone.models.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.models.NoteStatus
 
 @Dao
 interface NotesDao {
 
      @Insert(onConflict = OnConflictStrategy.REPLACE)
-     suspend fun addNote(noteItem:NoteItem)
+     suspend fun insert(note:NoteItem):Long
+
+     @Query("Select * From Notes")
+     fun getNotesList(): LiveData<List<NoteItem>?>
 
      @Update
-     suspend fun updateNote(noteItem: NoteItem)
+     suspend fun update(note: NoteItem)
 
      @Delete
-     suspend fun deleteNote(noteItem: NoteItem)
-
-     @Query("Select * From notes Where noteStatus =:status")
-     fun getStatusNote(status:NoteStatus):LiveData<List<NoteItem>?>
-
-     @Query("Select * From notes")
-     fun getAllNotes():LiveData<List<NoteItem>?>
+     suspend fun delete(note: NoteItem)
 }

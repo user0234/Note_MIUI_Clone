@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="7dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        >
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/bt_play"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="false"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/audio_item_play_button" />
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ssdfdfsdf"
+            android:maxLength="8"
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/visualizer"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/bt_play"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.chibde.visualizer.LineBarVisualizer
+            android:id="@+id/visualizer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/timer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bt_delete"
+
+            />
+        <androidx.appcompat.widget.AppCompatImageButton
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/bt_delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="false"
+            android:visibility="visible"
+            android:src="@drawable/delete_button_menu_default_theme" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

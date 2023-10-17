@@ -1,19 +1,20 @@
 package com.hellow.notemiuiclone.repository.notes
 
 import androidx.lifecycle.LiveData
-import com.hellow.notemiuiclone.models.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 
 interface RepositoryNotesBluePrint {
 
-    suspend fun  addNote(note:NoteItem)
+    suspend fun createNote(note: NoteItem) : Long
 
-    suspend fun updateNote(note: NoteItem)
+    fun getNotes() :LiveData<List<NoteItem>?>
 
     suspend fun deleteNote(note: NoteItem)
 
-    fun getAliveNotes():LiveData<List<NoteItem>?>
+    suspend fun updateNote(note: NoteItem)
 
-    fun getDeletedNotes():LiveData<List<NoteItem>?>
+    fun getTheme(num:Int,nightMode:Boolean): ThemeItem
 
-    fun getArchivedNotes():LiveData<List<NoteItem>?>
+    fun getAllTheme():List<ThemeItem>
 }

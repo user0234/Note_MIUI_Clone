@@ -9,7 +9,7 @@
         android:id="@+id/noteFragment"
         android:name="com.hellow.notemiuiclone.ui.fragment.NoteFragment"
         android:label="fragment_notes"
-        tools:layout="@layout/fragment_notes" >
+        tools:layout="@layout/fragment_note" >
         <action
             android:id="@+id/action_noteFragment_to_editCreateActivity"
 
@@ -17,7 +17,7 @@
     </fragment>
     <activity
         android:id="@+id/editCreateActivity"
-        android:name="com.hellow.notemiuiclone.ui.editActivity.EditCreateActivity"
+        android:name="com.hellow.notemiuiclone.ui.editActivity1.EditCreateActivity"
         android:label="activity_edit_create"
         tools:layout="@layout/activity_edit_create" />
 </navigation>

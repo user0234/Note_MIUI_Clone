@@ -1,36 +1,23 @@
 package com.hellow.notemiuiclone.ui.mainActivity
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup.LayoutParams
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NoteTabAdaptor
-import com.hellow.notemiuiclone.adapter.ReminderSubItemDialogAdaptor
 import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
 import com.hellow.notemiuiclone.database.reminderDatabase.ReminderDatabase
 import com.hellow.notemiuiclone.databinding.ActivityMainBinding
-import com.hellow.notemiuiclone.databinding.ReminderDialogLayoutBinding
 import com.hellow.notemiuiclone.dialogs.CreateReminderDialog
-import com.hellow.notemiuiclone.models.NoteItem
 import com.hellow.notemiuiclone.models.ReminderItem
-import com.hellow.notemiuiclone.models.ReminderStatus
-import com.hellow.notemiuiclone.models.ReminderSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
-import com.hellow.notemiuiclone.ui.editActivity.EditCreateActivity
+import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
+import com.hellow.notemiuiclone.ui.editActivity1.EditCreateActivity
 import com.hellow.notemiuiclone.utils.Utils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -65,19 +52,20 @@ class MainActivity : AppCompatActivity() {
         val adapter = NoteTabAdaptor(this, 2)
         viewBinding.viewPager.adapter = adapter
 
-        TabLayoutMediator(viewBinding.tabLayout,viewBinding.viewPager){ tab, position ->
-                           when(position){
-                               0 -> {
-                                   tab.setIcon(R.drawable.note_icon_yellow)
-                               }
-                               1 -> {
-                                   tab.setIcon(R.drawable.task_icon)
-                               }
+        TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.setIcon(R.drawable.note_icon_yellow)
+                }
 
-                               else -> {
-                                   tab.setIcon(R.drawable.note_icon_yellow)
-                               }
-                           }
+                1 -> {
+                    tab.setIcon(R.drawable.task_icon)
+                }
+
+                else -> {
+                    tab.setIcon(R.drawable.note_icon_yellow)
+                }
+            }
         }.attach()
 
         createSnackBar("tab count ${viewBinding.tabLayout.tabCount}")
@@ -92,26 +80,26 @@ class MainActivity : AppCompatActivity() {
         viewBinding.fabCreate.setOnClickListener {
 
             if (viewBinding.viewPager.currentItem == 0) {
-                val intent = Intent(this, EditCreateActivity::class.java)
-                val noteId = LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
-                val newNote = NoteItem(idDate = noteId, recentChangeDate = noteId)
-                viewModel.saveNote(newNote)
-                intent.putExtra(Utils.NOTE_ITEM_CREATE,newNote)
+                val intent = Intent(this, CreatEditActivity::class.java)
+                val noteId = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
+                val note = NoteItem(noteId, recentChangeDate = noteId)
+                viewModel.addNote(note)
+                intent.putExtra(Utils.NOTE_ITEM_LIST,note)
                 startActivity(intent)
             } else {
                 // create new reminder item using dialogue
-             //   showCreateDialog()
-                 showCreateDialog2()
+                //   showCreateDialog()
+                showCreateDialog2()
             }
 
         }
     }
-    private fun showCreateDialog2(){
+
+    private fun showCreateDialog2() {
         val reminderDialog = object : CreateReminderDialog(
             this@MainActivity,
 
-        ) {
+            ) {
             override fun onItemDone(item: ReminderItem?) {
                 if (item != null) {
                     item.TimerTime

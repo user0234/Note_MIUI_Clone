@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
-import com.hellow.notemiuiclone.ui.editActivity.EditCreateActivity
+import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
+import com.hellow.notemiuiclone.ui.editActivity1.EditCreateActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
@@ -33,13 +34,13 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
 
         notesAdapter.setOnItemClickListener { note ->
             // go to edit /create activity
-            val intent = Intent(view.context, EditCreateActivity::class.java)
-
+            val intent = Intent(view.context, CreatEditActivity::class.java)
             intent.putExtra(NOTE_ITEM_LIST, note)
             startActivity(intent)
         }
 
-        viewModel.getNotes().observe(viewLifecycleOwner) {
+        viewModel.getNotes().observe(activity as MainActivity)
+        {
             if (it == null) {
                 rvNotes.visibility = View.GONE
                 rvEmptyView.visibility = View.VISIBLE
@@ -81,7 +82,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     viewModel.deleteNote(note)
                     Snackbar.make(view, "deleted forever", Snackbar.LENGTH_LONG).apply {
                         setAction("StopDelete") {
-                            viewModel.saveNote(note)
+                            viewModel.addNote(note)
                         }
                         show()
                     }
@@ -90,7 +91,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     viewModel.archiveNote(note)
                     Snackbar.make(view, "Note Archived", Snackbar.LENGTH_LONG).apply {
                         setAction("Undo") {
-                            viewModel.saveNote(note)
+                            viewModel.addNote(note)
                         }
                         show()
                     }

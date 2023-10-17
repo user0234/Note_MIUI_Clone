@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.hellow.notemiuiclone.databinding.NotesListItemBinding
 import com.hellow.notemiuiclone.databinding.ReminderSubItemBinding
-import com.hellow.notemiuiclone.models.NoteItem
-import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderSubItem
 import com.hellow.notemiuiclone.utils.Utils
 

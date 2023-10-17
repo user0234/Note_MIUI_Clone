@@ -1,4 +1,4 @@
-package com.hellow.notemiuiclone.ui.editActivity
+package com.hellow.notemiuiclone.ui.editActivity1
 
 import android.content.Intent
 import android.graphics.Color
@@ -16,7 +16,7 @@ import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.ThemeAdaptor
 import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
 import com.hellow.notemiuiclone.databinding.ActivityEditCreateBinding
-import com.hellow.notemiuiclone.models.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_CREATE
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
@@ -68,18 +68,28 @@ class EditCreateActivity : AppCompatActivity() {
             if (intentValue.hasExtra(NOTE_ITEM_CREATE)) {
                 isNoteNew = true
                 currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intentValue.getSerializableExtra(NOTE_ITEM_CREATE, NoteItem::class.java)!!
+                    intent.getParcelableExtra(
+                        "noteItem",
+                        NoteItem::class.java
+                    )!!
+
                 } else {
-                    intentValue.getSerializableExtra(NOTE_ITEM_CREATE) as NoteItem
+                    intent.getParcelableExtra("noteItem")!!
+
                 }
 
             }
 
             if (intentValue.hasExtra(NOTE_ITEM_LIST)) {
                 currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intentValue.getSerializableExtra(NOTE_ITEM_LIST, NoteItem::class.java)!!
+                    intent.getParcelableExtra(
+                        "noteItem",
+                        NoteItem::class.java
+                    )!!
+
                 } else {
-                    intentValue.getSerializableExtra(NOTE_ITEM_LIST) as NoteItem
+                    intent.getParcelableExtra("noteItem")!!
+
                 }
             }
         }
@@ -127,7 +137,7 @@ class EditCreateActivity : AppCompatActivity() {
     }
 
     private fun setUpTheme() {
-        themeAdapter = ThemeAdaptor()
+        themeAdapter = ThemeAdaptor(2)
         binding.listBackgroundTheme.adapter = themeAdapter
         binding.listBackgroundTheme.layoutManager = LinearLayoutManager(
             this,
@@ -135,7 +145,7 @@ class EditCreateActivity : AppCompatActivity() {
         )
 
         binding.listBackgroundTheme.setHasFixedSize(true)
-        themeAdapter.differ.submitList(themeListData)
+        themeAdapter.differ.submitList(null)
         themeAdapter.setOnItemClickListener {
             viewModel.changeTheme(it)
         }

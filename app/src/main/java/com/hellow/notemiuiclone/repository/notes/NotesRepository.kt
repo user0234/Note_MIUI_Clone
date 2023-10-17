@@ -1,37 +1,32 @@
 package com.hellow.notemiuiclone.repository.notes
 
-import androidx.lifecycle.LiveData
 import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
-import com.hellow.notemiuiclone.models.NoteItem
-import com.hellow.notemiuiclone.models.NoteStatus
+import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.ThemeItem
+import com.hellow.notemiuiclone.utils.ConstantValues
 
 class NotesRepository(
-    private val database: NotesDataBase
+    private val dataBase: NotesDataBase
 ) : RepositoryNotesBluePrint {
 
+    override suspend fun createNote(note: NoteItem) = dataBase.notesDao().insert(note)
 
-    override suspend fun addNote(note: NoteItem) {
-        database.notesDao().addNote(note)
+    override fun getNotes() = dataBase.notesDao().getNotesList()
+
+    override suspend fun deleteNote(note: NoteItem) = dataBase.notesDao().delete(note)
+
+    override suspend fun updateNote(note: NoteItem) = dataBase.notesDao().update(note)
+
+    override fun getTheme(num:Int, nightMode:Boolean): ThemeItem {
+        return if(nightMode){
+            ConstantValues.getNightModeTheme(num)
+        }else{
+            ConstantValues.getLightModeTheme(num)
+        }
     }
 
-    override suspend fun updateNote(note: NoteItem) {
-        database.notesDao().updateNote(note)
-    }
-
-    override suspend fun deleteNote(note: NoteItem) {
-        database.notesDao().deleteNote(note)
-     }
-
-    override fun getAliveNotes(): LiveData<List<NoteItem>?> {
-        return database.notesDao().getStatusNote(NoteStatus.Alive)
-    }
-
-    override fun getDeletedNotes(): LiveData<List<NoteItem>?> {
-      return  database.notesDao().getStatusNote(NoteStatus.Deleted)
-    }
-
-    override fun getArchivedNotes(): LiveData<List<NoteItem>?> {
-       return database.notesDao().getStatusNote(NoteStatus.Archive)
+    override fun getAllTheme():List<ThemeItem>{
+        return  ConstantValues.themeList
     }
 
 }
