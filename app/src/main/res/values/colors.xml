@@ -5,7 +5,7 @@
     <color name="sub_heading_text_color">#3B3B3A</color>
     <color name="label_text_color">#656561</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background_main">#DCDCCF</color>
+    <color name="background_main">#F8F8F0</color>
     <color name="black">#FF000000</color>
     <color name="reminder_head_line_text_color">#55000000</color>
 
@@ -17,12 +17,7 @@
     <color name="edit_screen_default_theme_item">#FF000000</color>
 
     // theme 2 items
-    <color name="edit_screen_theme2_menu_color">#072963</color>
-    <color name="edit_screen_theme2_description_item_color">#333B69DC</color>
 
-    <color name="md_blue_gray_700">#1c2733</color>
-    <color name="md_blue_gray_500">#253343</color>
-    <color name="dark_white">#eaeaea</color>
     <color name="md_yellow_A700">#ffd600</color>
     <color name="md_grey_100_75">#80F5F5F5</color>
     <color name="md_grey_100">#f5f5f5</color>

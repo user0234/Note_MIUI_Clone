@@ -2,6 +2,7 @@ package com.hellow.notemiuiclone.ui.mainActivity
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -17,8 +18,8 @@ import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
 import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
-import com.hellow.notemiuiclone.ui.editActivity1.EditCreateActivity
 import com.hellow.notemiuiclone.utils.Utils
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
 
-        createSnackBar("tab count ${viewBinding.tabLayout.tabCount}")
+     //  createSnackBar("tab count ${viewBinding.tabLayout.tabCount}")
         viewBinding.tabLayout.tabCount
 //        viewBinding.tabLayout.addTab(
 //            viewBinding.tabLayout.newTab().setIcon(R.drawable.note_icon_yellow)
@@ -100,10 +101,23 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity,
 
             ) {
-            override fun onItemDone(item: ReminderItem?) {
+            override fun onItemDone(item: ReminderItem?,time: LocalDateTime) {
                 if (item != null) {
-                    item.TimerTime
-                    // set an alarm for that time
+
+                    val startsTime = LocalDateTime.now()
+
+                    val mSimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    val mStartTime = mSimpleDateFormat.parse(time.toString())
+                    val mEndTime = mSimpleDateFormat.parse(time.toString())
+
+                    val intent = Intent(Intent.ACTION_INSERT).apply {
+                        data = CalendarContract.Reminders.CONTENT_URI
+                        putExtra(CalendarContract.Reminders.TITLE, title)
+                        putExtra(CalendarContract.Reminders.ALL_DAY, false)
+                        putExtra(CalendarContract.EXTRA_EVENT_END_TIME, mEndTime )
+                        startActivity(intent)
+                    }
+                    // TODO set an alarm for that time
                     viewModel.createNewReminder(item)
                 }
 
@@ -120,121 +134,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    private fun showCreateDialog() {
-
-        val dialog = Dialog(this, R.style.material_dialog)
-        val dialogViewBinding = ReminderDialogLayoutBinding.inflate(dialog.layoutInflater)
-        dialog.setContentView(dialogViewBinding.root)
-
-        dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        dialogViewBinding.etMain.requestFocus()
-
-        val reminderSubItemDialogAdaptor = ReminderSubItemDialogAdaptor()
-        dialogViewBinding.rvSubItem.adapter = reminderSubItemDialogAdaptor
-        dialogViewBinding.rvSubItem.layoutManager = LinearLayoutManager(
-            dialogViewBinding.root.context,
-            LinearLayoutManager.VERTICAL, false
-        )
-        dialogViewBinding.rvSubItem.setHasFixedSize(false)
-
-        reminderSubItemDialogAdaptor.setOnItemClickListener { gonext ->
-
-            if (gonext) {
-                val reminderSubItemList: MutableList<ReminderSubItem> = mutableListOf()
-
-                reminderSubItemList.addAll(reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList)
-
-                reminderSubItemList.add(ReminderSubItem("", false,reminderSubItemList.size))
-
-
-                reminderSubItemDialogAdaptor.reminderSubItemDiffer.submitList(reminderSubItemList)
-
-            } else {
-
-                if (reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList.size <= 2) {
-                    dialogViewBinding.llMainItem.visibility = View.VISIBLE
-                    dialogViewBinding.llSubItem.visibility = View.GONE
-                    dialogViewBinding.etMain.setText(
-                        reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList[0].name
-                    )
-                    dialogViewBinding.etMain.requestFocus()
-                    dialogViewBinding.checkBoxDialog.isChecked = false
-
-                } else {
-                    reminderSubItemDialogAdaptor.reminderSubItemDiffer.submitList(
-                        reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList.subList(
-                            0,
-                            reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList.size - 1
-                        )
-                    )
-                }
-            }
-        }
-
-
-        dialogViewBinding.etMain.setOnKeyListener { vew, keyCode, event ->
-            val currentText = dialogViewBinding.etMain.text.toString()
-            if (keyCode == KeyEvent.KEYCODE_ENTER && currentText != "") {
-
-                createSnackBar("enter clicked")
-                dialogViewBinding.llMainItem.visibility = View.GONE
-                dialogViewBinding.llSubItem.visibility = View.VISIBLE
-                reminderSubItemDialogAdaptor.reminderSubItemDiffer.submitList(
-                    listOf(
-                        ReminderSubItem(currentText, false,0),
-                        ReminderSubItem("", false,1)
-                    )
-                )
-
-            }
-
-            true
-        }
-        dialogViewBinding.buttonDone.setOnClickListener {
-            // create a new reminder from all the data
-            dialog.cancel()
-        }
-        dialogViewBinding.setReminderButton.setOnClickListener {
-            // pick date and time for reminder and add a alarm for that time when cancel
-        }
-        dialogViewBinding.mainCancelable.setOnClickListener {
-            dialog.cancel()
-        }
-
-        dialog.setOnCancelListener {
-
-            val id = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
-
-            val title = if (dialogViewBinding.llMainItem.visibility == View.GONE) {
-                "Checklist of subtasks"
-            } else {
-                dialogViewBinding.etMain.text.toString()
-            }
-            // take timer time from button setReminderButton
-            val timerTime = dialogViewBinding.setReminderButton.text.toString()
-
-            val subItemList = if (dialogViewBinding.llMainItem.visibility == View.GONE) {
-                reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList
-            } else {
-                reminderSubItemDialogAdaptor.reminderSubItemDiffer.currentList.subList(0, 0)
-            }
-
-            val reminderItem = ReminderItem(
-                id, title, reminderStatus = ReminderStatus.NotDone, isExpended = false,
-                TimerTime = timerTime, checkedCount = 0, itemsList = subItemList
-            )
-
-            if(title != ""){
-                viewModel.createNewReminder(reminderItem)
-
-            }
-
-        }
-        dialog.show()
-    }
-    */
 }

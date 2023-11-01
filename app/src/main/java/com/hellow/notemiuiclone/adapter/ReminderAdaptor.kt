@@ -52,7 +52,18 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
         val currentItem = reminderDiffer.currentList[position]
 
-        holder.binding.reminderTitleMain.text = currentItem.title
+        holder.binding.root.setOnClickListener {
+            onItemClickListener?.let {
+                it(currentItem, false)
+            }
+        }
+
+        holder.binding.reminderTitleMain.text = if (currentItem.title == "") {
+            "Checklist of subtasks"
+        } else {
+            currentItem.title
+        }
+
 
         if (currentItem.TimerTime == "Set reminder") {
             holder.binding.reminderTime.visibility = View.GONE
@@ -80,51 +91,65 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                 "${currentItem.checkedCount}/${currentItem.itemsList.size}"
 
             val adaptor = ReminderSubItemAdaptor()
-                holder.binding.rvReminderList.adapter = adaptor
-                 holder.binding.rvReminderList.layoutManager = LinearLayoutManager(
-                     holder.itemView.context,
-                     LinearLayoutManager.VERTICAL,false)
-                 holder.binding.rvReminderList.setHasFixedSize(true)
-               adaptor.setOnItemClickListener { isChecked,subListPosition ->
+            holder.binding.rvReminderList.adapter = adaptor
+            holder.binding.rvReminderList.layoutManager = LinearLayoutManager(
+                holder.itemView.context,
+                LinearLayoutManager.VERTICAL, false
+            )
+            holder.binding.rvReminderList.setHasFixedSize(true)
 
-                   if(isChecked){
+            adaptor.setOnItemListener {
 
-                       currentItem.checkedCount = currentItem.checkedCount + 1
-                       if(currentItem.checkedCount == currentItem.itemsList.size){
-                           currentItem.reminderStatus = ReminderStatus.DoneWhole
-                           currentItem.isExpended = false
-                           currentItem.itemsList[subListPosition].isDone = true
+                onItemClickListener?.let {
+                    it(currentItem, true)
+                }
+            }
 
-                           onItemClickListener?.let {
-                               it(currentItem,true)
-                           }
-                       }else{
-                           reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone = true
-                       }
+            adaptor.setOnItemClickListener { isChecked, subListPosition ->
 
-                   }else{
-                       if(currentItem.checkedCount == currentItem.itemsList.size){
+                if (isChecked) {
 
-                           currentItem.checkedCount = currentItem.checkedCount - 1
-                           currentItem.reminderStatus = ReminderStatus.NotDone
-                           currentItem.itemsList[subListPosition].isDone = false
+                    currentItem.checkedCount = currentItem.checkedCount + 1
+                    if (currentItem.checkedCount == currentItem.itemsList.size) {
+                        currentItem.reminderStatus = ReminderStatus.DoneWhole
+                        currentItem.isExpended = false
+                        currentItem.itemsList[subListPosition].isDone = true
 
-                           onItemClickListener?.let {
-                               it(currentItem,true)
-                           }
-                       } else{
-                           reminderDiffer.currentList[holder.adapterPosition].checkedCount = currentItem.checkedCount - 1
-                           reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone = false
 
-                       }
+                    } else {
+                        reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone =
+                            true
+                    }
+                    onMainItemCheckedListener?.let {
+                        it(currentItem, true)
+                    }
 
-                   }
-                   holder.binding.itemCount.text =
-                       "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+                } else {
 
-                   adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
-               }
-             adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
+                    if (currentItem.checkedCount == currentItem.itemsList.size) {
+
+                        currentItem.checkedCount = currentItem.checkedCount - 1
+                        currentItem.reminderStatus = ReminderStatus.NotDone
+                        currentItem.itemsList[subListPosition].isDone = false
+
+
+                    } else {
+                        reminderDiffer.currentList[holder.adapterPosition].checkedCount =
+                            currentItem.checkedCount - 1
+                        reminderDiffer.currentList[holder.adapterPosition].itemsList[subListPosition].isDone =
+                            false
+
+                    }
+                    onItemClickListener?.let {
+                        it(currentItem, true)
+                    }
+                }
+                holder.binding.itemCount.text =
+                    "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+
+                adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
+            }
+            adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
 
         }
 
@@ -133,21 +158,24 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
             if (currentItem.isExpended) {
 
-                currentItem.isExpended = false
                 holder.binding.ivShowListButton.animate()
-                    .setDuration(40)
-                    .rotation(-180F)
+                    .setDuration(80)
+                    .rotation(0F)
+                    .withEndAction {
+                        currentItem.isExpended = false
+                        holder.binding.rvReminderList.visibility = View.GONE
+                    }
                     .start()
-                holder.binding.rvReminderList.visibility = View.VISIBLE
-
             } else {
 
-                currentItem.isExpended = true
                 holder.binding.ivShowListButton.animate()
-                    .setDuration(40)
-                    .rotation(0F)
+                    .setDuration(80)
+                    .rotation(180F)
+                    .withEndAction {
+                        currentItem.isExpended = true
+                        holder.binding.rvReminderList.visibility = View.VISIBLE
+                    }
                     .start()
-                holder.binding.rvReminderList.visibility = View.GONE
 
             }
 
@@ -164,8 +192,8 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                     it.isDone = false
                 }
 
-                onItemClickListener?.let {
-                    it(currentItem,true)
+                onMainItemCheckedListener?.let {
+                    it(currentItem, true)
                 }
 
             } else {
@@ -178,13 +206,13 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                     it.isDone = true
                 }
 
-                onItemClickListener?.let {
-                    it(currentItem,true)
+                onMainItemCheckedListener?.let {
+                    it(currentItem, false)
                 }
             }
         }
 
-        holder.itemView.setOnTouchListener(object : View.OnTouchListener{
+        holder.itemView.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
 
@@ -217,18 +245,26 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
         })
 
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.let {
-                 it(currentItem,false)
-            }
-        }
+
     }
 
     //if we should update the element or update the item and open the dialog for edit
 
-    private var onItemClickListener: ((ReminderItem,Boolean) -> Unit)? = null
+    private var onItemClickListener: ((ReminderItem, Boolean) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (ReminderItem,Boolean) -> Unit) {
+    fun setOnItemClickListener(listener: (ReminderItem, Boolean) -> Unit) {
         onItemClickListener = listener
     }
+
+    private var onMainItemCheckedListener: ((ReminderItem, Boolean) -> Unit)? = null
+    fun setOnMainItemCheckListener(listener: (ReminderItem, Boolean) -> Unit) {
+        onMainItemCheckedListener = listener
+    }
+
+    private var onSubItemCheckListener: ((ReminderItem, Boolean) -> Unit)? = null
+    fun setOnSubItemCheckListener(listener: (ReminderItem, Boolean) -> Unit) {
+        onSubItemCheckListener = listener
+    }
+
+
 }

@@ -9,16 +9,13 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hellow.notemiuiclone.R
-import com.hellow.notemiuiclone.adapter.EditDescriptionItemAdaptor
 import com.hellow.notemiuiclone.audioPlayer.MyAudioPlayer
 import com.hellow.notemiuiclone.databinding.EditDescriptionAudioItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionCheckboxItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionImageItemBinding
-import com.hellow.notemiuiclone.models.NoteDescItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem

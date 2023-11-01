@@ -55,6 +55,12 @@ class ReminderSubItemAdaptor: RecyclerView.Adapter<ReminderSubItemAdaptor.Remind
                 }
         }
 
+        holder.binding.reminderTitleMain.setOnClickListener {
+            onItemListener?.let {
+                it(true)
+            }
+        }
+
     }
        // position and isChecked
 
@@ -62,6 +68,12 @@ class ReminderSubItemAdaptor: RecyclerView.Adapter<ReminderSubItemAdaptor.Remind
 
     fun setOnItemClickListener(listener: (Boolean,Int) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private var onItemListener: ((Boolean) -> Unit)? = null
+
+    fun setOnItemListener(listener: (Boolean) -> Unit) {
+        onItemListener = listener
     }
 
 }

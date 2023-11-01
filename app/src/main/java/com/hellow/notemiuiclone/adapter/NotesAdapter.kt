@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.NotesListItemBinding
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.utils.Utils
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
@@ -46,19 +48,20 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
             )
         )
     }
-
     override fun onBindViewHolder(holder: NotesAdapter.NotesViewHolder, position: Int) {
 
         val currentItem = notesDiffer.currentList[position]
         holder.binding.tvTitle.text = currentItem.title
 
-//        val holderRes = holder.itemView.context.resources
-//        val displayDensity = holderRes.displayMetrics.density
-
-        var noteDesc = currentItem.descriptionText
+        val noteDesc = currentItem.descriptionText
 
         holder.binding.tvSubtitle.text = noteDesc
-        holder.binding.tvTime.text = Utils.dateConvert(currentItem.recentChangeDate)
+
+        val currentTime =
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a"))
+                .toString()
+        holder.binding.tvTime.text =
+            Utils.dateFormatterNotesList(currentItem.recentChangeDate, currentTime)
         holder.binding.root.setCardBackgroundColor(
             (Color.parseColor(
                 Utils.backgroundColor(

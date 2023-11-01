@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="note_drawer_item">Notes</string>
-    <string name="setting_drawer_item">Settings</string>
-    <string name="edit_view_title_hint">Title</string>
     <string name="setting_home_menu_item">Setting\n</string>
+    <string name="add_new_item">add New Item</string>
 </resources>

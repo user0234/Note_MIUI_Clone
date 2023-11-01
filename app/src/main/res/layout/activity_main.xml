@@ -5,8 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_main"
     tools:context=".ui.mainActivity.MainActivity"
     >
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tool_bar"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -14,30 +16,30 @@
         android:layout_height="?attr/actionBarSize"
         android:orientation="vertical"
         app:contentInsetStart="0dp"
-        android:background="@color/background_main"
+        android:background="@android:color/transparent"
         app:contentInsetStartWithNavigation="0dp"
-        app:menu="@menu/home_screen_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/home_screen_menu"
         app:title="@null">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:background="@android:color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent">
 
             <com.google.android.material.tabs.TabLayout
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
                 android:id="@+id/tab_layout"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/background_main"
-                app:tabIndicatorColor="@color/background_main"
-                >
-
-
-            </com.google.android.material.tabs.TabLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorColor="@color/background_main" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -47,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/view_pager"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tool_bar">
 
@@ -65,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        />
+        android:contentDescription="@string/add_new_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

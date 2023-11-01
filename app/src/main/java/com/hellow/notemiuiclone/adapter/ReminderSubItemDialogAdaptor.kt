@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.DialogReminderSubItemBinding
 import com.hellow.notemiuiclone.models.ReminderSubItem
+import com.hellow.notemiuiclone.utils.showKeyboard
 
 class ReminderSubItemDialogAdaptor :
     RecyclerView.Adapter<ReminderSubItemDialogAdaptor.ReminderSubItemViewHolder>() {
@@ -32,6 +33,16 @@ class ReminderSubItemDialogAdaptor :
 
     val reminderSubItemDiffer = AsyncListDiffer(this, differCallBack)
 
+    private var recyclerView: RecyclerView? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = null
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderSubItemViewHolder {
         return ReminderSubItemViewHolder(
             DialogReminderSubItemBinding.inflate(
@@ -49,14 +60,25 @@ class ReminderSubItemDialogAdaptor :
     override fun onBindViewHolder(holder: ReminderSubItemViewHolder, position: Int) {
         val currentItem = reminderSubItemDiffer.currentList[position]
         holder.binding.checkBoxSubMain.isChecked = currentItem.isDone
-        if(position == reminderSubItemDiffer.currentList.size - 1){
-            holder.binding.etSubText.requestFocus()
-        }
-
         holder.binding.etSubText.setText(currentItem.name)
-
+        if (position == reminderSubItemDiffer.currentList.size - 1) {
+            holder.binding.etSubText.requestFocus()
+            holder.binding.etSubText.setSelection(currentItem.name.length)
+        }
         holder.binding.etSubText.addTextChangedListener {
             reminderSubItemDiffer.currentList[holder.adapterPosition].name = it.toString()
+
+            val text = it.toString()
+            if (text.contains("\n") && text.isNotBlank()) {
+                reminderSubItemDiffer.currentList[holder.adapterPosition].isDone = false
+                onItemClickListener?.let {
+                    it(true)
+                }
+            } else {
+                if (text.contains("\n")) {
+                    holder.binding.etSubText.setText("")
+                }
+            }
 
         }
         holder.binding.etSubText.setOnKeyListener { vew, keyCode, event ->
@@ -80,6 +102,21 @@ class ReminderSubItemDialogAdaptor :
         }
 
     }
+
+    fun setItemFocus(position: Int) {
+        val rcv = recyclerView ?: return
+
+        // If item to focus on doesn't exist yet, save it for later.
+
+        val viewHolder = rcv.findViewHolderForAdapterPosition(1) as ReminderSubItemViewHolder?
+        if (viewHolder != null) {
+            viewHolder.binding.etSubText.requestFocus()
+            viewHolder.binding.etSubText.setSelection(position)
+            viewHolder.binding.etSubText.showKeyboard()
+        }
+
+    }
+
     // position and isChecked
 
     private var onItemClickListener: ((Boolean) -> Unit)? = null

@@ -52,7 +52,7 @@ abstract class EditReminderDialog(
             val currentText = binding.etMain.text.toString()
             if (keyCode == KeyEvent.KEYCODE_ENTER && currentText != "") {
 
-                binding.llMainItem.visibility = View.GONE
+             //   binding.llMainItem.visibility = View.GONE
                 binding.llSubItem.visibility = View.VISIBLE
                 adaptor.reminderSubItemDiffer.submitList(
                     listOf(
@@ -69,15 +69,13 @@ abstract class EditReminderDialog(
         binding.buttonDone.setOnClickListener {
             // create a new reminder from all the data
             val id = currentItem.idDate
-            val title = if (binding.llMainItem.visibility == View.GONE) {
+            val title = if (binding.llSubItem.visibility == View.VISIBLE) {
                 "Checklist of subtasks"
             } else {
                 binding.etMain.text.toString()
             }
-            // take timer time from button setReminderButton
-            val timerTime = binding.setReminderButton.text.toString()
 
-            val subItemList = if (binding.llMainItem.visibility == View.GONE) {
+            val subItemList = if (binding.llSubItem.visibility == View.VISIBLE) {
                 adaptor.reminderSubItemDiffer.currentList
             } else {
                 adaptor.reminderSubItemDiffer.currentList.subList(0, 0)
@@ -85,7 +83,7 @@ abstract class EditReminderDialog(
 
             val reminderItem = ReminderItem(
                 id, title, reminderStatus = ReminderStatus.NotDone, isExpended = false,
-                TimerTime = timerTime, checkedCount = 0, itemsList = subItemList
+                TimerTime = "Set reminder", checkedCount = 0, itemsList = subItemList
             )
 
             if(title==""){
@@ -99,18 +97,6 @@ abstract class EditReminderDialog(
         binding.mainCancelable.setOnClickListener {
             cancel()
         }
-
-        binding.resetReminderValue.setOnClickListener {
-            binding.setReminderButton.text = "Set reminder"
-            binding.resetReminderValue.visibility = View.GONE
-        }
-
-        binding.setReminderButton.setOnClickListener {
-            // pick date and time for reminder and add a alarm for that time when cancel dialog
-            datePicker()
-
-        }
-
 
     }
 
@@ -127,14 +113,14 @@ abstract class EditReminderDialog(
                 adaptor.reminderSubItemDiffer.submitList(reminderSubItemList)
 
             } else {
-
                 if (adaptor.reminderSubItemDiffer.currentList.size <= 2) {
-                    binding.llMainItem.visibility = View.VISIBLE
+                //    binding.llMainItem.visibility = View.VISIBLE
                     binding.llSubItem.visibility = View.GONE
                     binding.etMain.setText(
                         adaptor.reminderSubItemDiffer.currentList[0].name
                     )
                     binding.etMain.requestFocus()
+                    binding.etMain.setSelection(adaptor.reminderSubItemDiffer.currentList[0].name.length)
                     binding.checkBoxDialog.isChecked = false
 
                 } else {
@@ -153,26 +139,19 @@ abstract class EditReminderDialog(
 
         if (currentItem.itemsList.size > 1) {
             adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
-            binding.llMainItem.visibility = View.GONE
+         //   binding.llMainItem.visibility = View.GONE
             binding.llSubItem.visibility = View.VISIBLE
 
         } else {
-            binding.llMainItem.visibility = View.VISIBLE
+  //          binding.llMainItem.visibility = View.VISIBLE
             binding.llSubItem.visibility = View.GONE
             binding.etMain.setText(currentItem.title)
             binding.etMain.requestFocus()
+            binding.etMain.setSelection(currentItem.title.length)
             binding.checkBoxDialog.isChecked =
                 currentItem.reminderStatus == ReminderStatus.DoneWhole
-
         }
 
-        if(currentItem.TimerTime == "Set reminder"){
-            binding.setReminderButton.text = "Set reminder"
-            binding.resetReminderValue.visibility = View.GONE
-        }else{
-            binding.setReminderButton.text = currentItem.TimerTime
-            binding.resetReminderValue.visibility = View.VISIBLE
-        }
     }
 
     private fun setUpRecyclerView() {
@@ -222,8 +201,6 @@ abstract class EditReminderDialog(
         val timePickerDialog = TimePickerDialog(context, { _, hourOfDay, minute ->
             time = "$hourOfDay:$minute"
 
-            binding.setReminderButton.text = "$date $time"
-            binding.resetReminderValue.visibility = View.VISIBLE
         }, mHour, mMin, false);
         timePickerDialog.show()
 

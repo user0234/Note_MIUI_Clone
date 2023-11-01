@@ -10,15 +10,5 @@
     <dimen name="note_list_item_date_text_size_unClicked">11sp</dimen>
     <dimen name="note_list_item_card_corner_radius_unClicked">15dp</dimen>
 
-    <dimen name="note_list_item_card_height_clicked">70dp</dimen>
-    <dimen name="note_list_item_title_size_clicked">14sp</dimen>
-    <dimen name="note_list_item_card_margin_vertical_clicked">15dp</dimen>
-    <dimen name="note_list_item_ll_margin_horizontal_clicked">15dp</dimen>
-    <dimen name="note_list_item_ll_margin_top_clicked">10dp</dimen>
-    <dimen name="note_list_item_ll_margin_bottom_clicked">10dp</dimen>
-    <dimen name="note_list_item_subTitle_size_clicked">11sp</dimen>
-    <dimen name="note_list_item_date_text_size_clicked">9sp</dimen>
-    <dimen name="note_list_item_card_corner_radius_clicked">15dp</dimen>
-
 
 </resources>

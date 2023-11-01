@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
 import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
-import com.hellow.notemiuiclone.ui.editActivity1.EditCreateActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
@@ -49,7 +48,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     rvNotes.visibility = View.GONE
                     rvEmptyView.visibility = View.VISIBLE
                 } else {
-                 // TODO sort it by most recent changed
+                    // TODO sort it by most recent changed
                     it.sortedBy { item ->
                         item.recentChangeDate
                     }
@@ -109,7 +108,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     private fun setUpRecyclerView() {
         notesAdapter = NotesAdapter()
         rvNotes.adapter = notesAdapter
-        rvNotes.layoutManager = LinearLayoutManager(activity)
+        rvNotes.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         rvNotes.setHasFixedSize(false)
     }
 
