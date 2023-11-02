@@ -6,7 +6,7 @@
     android:id="@+id/main_cancelable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@color/dialogBackgroundEmptyColor"
     android:paddingBottom="30dp">
 
     <com.google.android.material.card.MaterialCardView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:background="@android:color/transparent"
+        android:background="@color/imageDialogBackgroundColor"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,21 +22,33 @@
 
         <LinearLayout
             android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Image"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                />
+            <TextView
                 android:id="@+id/bt_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Camera"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="10dp"
                 android:clickable="true"
                 />
             <TextView
+                android:visibility="gone"
+                android:textStyle="bold"
                 android:id="@+id/bt_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,14 +58,16 @@
                 android:layout_marginStart="10dp"
                 android:clickable="true"
                 />
-             <androidx.appcompat.widget.AppCompatButton
+             <Button
                  android:id="@+id/bt_cancel"
                  android:text="Cancel"
-                 android:textSize="15sp"
+                 android:textSize="17sp"
+                 android:textColor="@color/black"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginHorizontal="10dp"
-                 android:background="@drawable/circular_background_grey"
+                 app:backgroundTint="@color/imageDialogCancelColor"
+
                  />
 
         </LinearLayout>

@@ -1,5 +1,7 @@
 package com.hellow.notemiuiclone.utils
 
+import android.content.Context
+import android.content.res.Configuration
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -7,6 +9,69 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object ConstantValues {
+
+    fun getThemeNoteList(context:Context,themeId:Int):ThemeItem{
+        return when (context.applicationContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+               return  if(themeId == 0){
+                     darkModeTheme
+                 }else{
+                   themeList[themeId]
+                 }
+            }
+
+            Configuration.UI_MODE_NIGHT_NO -> {
+                themeList[themeId]
+            }
+
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                themeList[themeId]
+            }
+
+            else -> {
+                themeList[themeId]
+            }
+        }
+    }
+    fun getGreyValue(context:Context):String {
+       return when (context.applicationContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                 "#626464"
+            }
+
+            Configuration.UI_MODE_NIGHT_NO -> {
+                "#AEAEAE"
+            }
+
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                "#AEAEAE"
+            }
+
+            else -> {
+               "#AEAEAE"
+            }
+        }
+    }
+
+    fun getBlackValue(context:Context):String {
+        return when (context.applicationContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                "#CBCBCB"
+            }
+
+            Configuration.UI_MODE_NIGHT_NO -> {
+                "#303030"
+            }
+
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                "#303030"
+            }
+
+            else -> {
+                "#303030"
+            }
+        }
+    }
 
     //BEGINNING-------------- Waveform visualisation constants ----------------------------------
     fun dateConvert(date: String): String {
@@ -17,20 +82,14 @@ object ConstantValues {
     }
 
     val themeList:List<ThemeItem> = listOf(
-        ThemeItem("#000000","#33000000","#F4E2E2","#FFFFFF","#7C7878"),
-        ThemeItem("#634907","#33DC8B3B","#DAC2AB","#F4E1CE","#C5A280"),
-        ThemeItem("#072963","#333B69DC","#ABBCDA","#CED9F4","#8097C5"),
-        ThemeItem("#1B6307","#3353DC3B","#B0DAAB","#D5F4CE","#82C580"),
-        ThemeItem("#630707","#33DC3B3B","#DAABAB","#F4CECE","#C58080"),
+        ThemeItem("#202020","#D1D1D1","#FEFEFE","#FCFCF9","#989898","#FEFEFE"), // default
+        ThemeItem("#A07B22","#E3DCBD","#F4F6E5","#FCFDF1","#CFC793","#EFE9D0"), // yellow
+        ThemeItem("#4B87C2","#CCDEEF","#E8F4F8","#F0F9FB","#AACAE6","#E8F4F8"), // blue
+        ThemeItem("#629F70","#D3EBD5","#EEFDED","#F2FDF2","#B4D5BA","#DBF2DF"), // green
+        ThemeItem("#CF5851","#F1D7CD","#FBF2EC","#FCF7F4","#EDB1AF","#F5DFD9"), // red
     )
 
-    val darkModeTheme:ThemeItem = ThemeItem("#FFFFFF","#33FFFFFF","#000000","#333131","#736666")
-
-    fun logI(value:String){
-
-    }
-
-
+    private val darkModeTheme:ThemeItem = ThemeItem("#DCDCDC","#2B2B2B","#000000","#141414","#626262","#222222")
 
     fun getNightModeTheme(num: Int):ThemeItem {
         return if(num == 0){
@@ -47,15 +106,9 @@ object ConstantValues {
 
     fun formatTimeIntervalMinSec(length: Long): String {
         val timeUnit = TimeUnit.MILLISECONDS
-        //		if (length < 0) {
-//			length = -length;
-//			long numMinutes = timeUnit.toMinutes(length);
-//			long numSeconds = timeUnit.toSeconds(length);
-//			return "-" + String.format(Locale.getDefault(), "%02d:%02d", numMinutes, numSeconds % 60);
-//		} else {
         val numMinutes = timeUnit.toMinutes(length)
         val numSeconds = timeUnit.toSeconds(length)
         return String.format(Locale.getDefault(), "%02d:%02d", numMinutes, numSeconds % 60)
-//		}
+
     }
 }

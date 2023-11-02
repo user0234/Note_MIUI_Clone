@@ -12,6 +12,7 @@ class MyAudioPlayer(private val context:Context): AudioPlayer {
 
     private var player:MediaPlayer? = null
     private var amplitudeTimer = Timer()
+    private var durationTimer = Timer()
     private val AMPLITUDE_UPDATE_MS = 75L
 
     override fun playFile(fileUri: Uri, visualizer: LineBarVisualizer) {

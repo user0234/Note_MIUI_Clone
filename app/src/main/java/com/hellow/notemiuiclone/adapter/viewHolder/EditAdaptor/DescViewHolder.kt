@@ -20,6 +20,7 @@ import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.utils.LoggingClass
+import com.hellow.notemiuiclone.utils.Utils
 import com.hellow.notemiuiclone.utils.showKeyboard
 
 sealed interface EditFocusableViewHolder {
@@ -30,6 +31,10 @@ sealed interface EditFocusableViewHolder {
 sealed interface EditImageViewHolder {
     fun addDescription(value: String)
     fun hideImageButton()
+}
+
+sealed interface EditAudioViewHolder {
+    fun stopPlaying()
 }
 
 class CheckBoxItemViewHolder(
@@ -309,9 +314,9 @@ class EditDescriptionImageItemViewHolder(
 }
 
 class EditDescriptionAudioItemViewHolder(
-    binding: EditDescriptionAudioItemBinding,
+   val binding: EditDescriptionAudioItemBinding,
     callback: EditAdaptor.Callback,
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) ,EditAudioViewHolder{
 
     private val timerText = binding.timer
     var player: MyAudioPlayer? = null
@@ -330,14 +335,20 @@ class EditDescriptionAudioItemViewHolder(
                         binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
                         playing = false
                     }
-                    player!!.setonPlayAmplitude {
-                      //
+                    player!!.setonPlayAmplitude { timer ->
+
+                        if (timer != null) {
+                            binding.timer.text = Utils.getTimer((timer/1000))
+                        }else {
+                            binding.timer.text = currentItem!!.audioLength.toString()
+                        }
                     }
                 }else {
                     player?.stop()
                     binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
                     playing = false
                     player = null
+                    binding.timer.text = currentItem!!.audioLength.toString()
                 }
             }
 
@@ -352,8 +363,17 @@ class EditDescriptionAudioItemViewHolder(
     fun bind(item: NoteSubItem) {
         currentItem = item
         timerText.text = (item.audioLength!!/1000).toString()
-
-
     }
+
+    override fun stopPlaying() {
+         if(player!=null){
+             player?.stop()
+             binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
+             playing = false
+             player = null
+             binding.timer.text = currentItem!!.audioLength.toString()
+         }
+    }
+
 
 }

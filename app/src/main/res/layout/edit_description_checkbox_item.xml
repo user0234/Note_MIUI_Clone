@@ -4,34 +4,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <CheckBox
         android:id="@+id/check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:clickable="true"
-        android:textSize="22sp"
-        android:textAlignment="textStart"
-        style="@style/Widget.Material3.CompoundButton.CheckBox"
-        />
+        android:layout_marginStart="-10dp"
+        android:visibility="visible"
+        app:buttonTint="@color/listItemCheckBoxColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="20dp"
+        app:layout_goneMarginStart="15dp" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/et_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/description_string_item_style"
-        android:layout_marginTop="5dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:lineHeight="35dp"
+        android:text="cffcvcvc"
+        android:minHeight="48dp"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:lineHeight="35dp"
-        android:inputType="textMultiLine"
-        android:text="fkdjfkdfvnjkdfdfkjndfjvnksdvnksjfnksnfkdsskdjnfkdjfkdfvnjkdfdfkjndfjvnksdvnksjfnksnfkdsskdjnfksjd"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/check_box"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

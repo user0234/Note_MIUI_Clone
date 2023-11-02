@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,14 +8,13 @@
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="10dp"
     android:elevation="5dp"
+    android:backgroundTint="@color/dialogWhiteBackGroundColor"
     app:cardCornerRadius="15dp"
     app:strokeWidth="0dp"
-
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:paddingBottom="20dp"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +32,7 @@
                 android:id="@+id/checkBox_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:buttonTint="@color/greyDialogColorCheckBox"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +56,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:text="text long wdfjvodfoijvodnfvkdfvjodifvjdofvdv"
-                    android:textColor="@color/heading_text_color"
+                    android:textColor="@color/black"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -65,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="text namre"
-                    android:textColor="@color/label_text_color"
+                    android:textColor="@color/greySubText2"
                     android:textSize="14sp"
                     android:visibility="gone" />
             </LinearLayout>
@@ -86,8 +87,8 @@
                     android:id="@+id/item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0/x"
-                    android:textColor="@color/reminder_head_line_text_color"
+                    android:text="0 / x"
+                    android:textColor="@color/greyDialogSupportItemColor"
                     android:textSize="16sp" />
 
                 <ImageButton
@@ -113,7 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="15dp"
-            android:visibility="visible"
+            android:visibility="gone"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraint_layout_reminder_top_view"

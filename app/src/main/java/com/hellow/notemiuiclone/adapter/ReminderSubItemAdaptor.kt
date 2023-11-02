@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.ReminderSubItemBinding
+import com.hellow.notemiuiclone.models.ReminderStatus
 import com.hellow.notemiuiclone.models.ReminderSubItem
+import com.hellow.notemiuiclone.utils.ConstantValues
 import com.hellow.notemiuiclone.utils.Utils
 
 class ReminderSubItemAdaptor: RecyclerView.Adapter<ReminderSubItemAdaptor.ReminderSubItemViewHolder>() {
@@ -46,7 +48,17 @@ class ReminderSubItemAdaptor: RecyclerView.Adapter<ReminderSubItemAdaptor.Remind
         val currentItem = reminderSubItemDiffer.currentList[position]
         holder.binding.checkBoxSubMain.isChecked = currentItem.isDone
         holder.binding.reminderTitleMain.text = currentItem.name
-        holder.binding.reminderTitleMain.setTextColor(Color.parseColor(Utils.getStatusTextColor(currentItem.isDone)))
+        if (currentItem.isDone) {
+            holder.binding.apply {
+                holder.binding.checkBoxSubMain.isChecked = true
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getGreyValue(holder.itemView.context)))
+            }
+        } else {
+            holder.binding.apply {
+                holder.binding.checkBoxSubMain.isChecked = false
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getBlackValue(holder.itemView.context)))
+            }
+        }
 
         holder.binding.checkBoxSubMain.setOnClickListener {
                currentItem.isDone = !currentItem.isDone

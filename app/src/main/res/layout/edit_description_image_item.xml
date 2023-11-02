@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/imageview2"
-        app:strokeColor="@color/primary"
+        app:strokeColor="@color/mainYellowColor"
         app:strokeWidth="0dp"
         android:scaleType="centerCrop"
         android:layout_marginTop="7dp"

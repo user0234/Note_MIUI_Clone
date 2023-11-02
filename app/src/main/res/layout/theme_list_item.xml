@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="110dp"
     android:layout_height="150dp"
-    app:strokeColor="@color/primary"
+    app:strokeColor="@color/mainYellowColor"
     app:strokeWidth="0dp"
     android:layout_marginTop="20dp"
     android:layout_marginStart="8dp"
@@ -15,15 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="10dp"
-        android:layout_margin="5dp"
         app:strokeWidth="0dp"
+        android:padding="5dp"
         >
         <ImageView
             android:id="@+id/iv_theme_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/note_icon_grey"
-            android:background="@android:color/white"
+            android:background="@color/transparent"
             android:importantForAccessibility="no" />
     </com.google.android.material.card.MaterialCardView>
 

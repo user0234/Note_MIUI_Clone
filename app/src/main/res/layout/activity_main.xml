@@ -5,18 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_main"
-    tools:context=".ui.mainActivity.MainActivity"
-    >
+    android:background="@color/mainBackGround"
+    tools:context=".ui.mainActivity.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tool_bar"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/transparent"
         android:orientation="vertical"
         app:contentInsetStart="0dp"
-        android:background="@android:color/transparent"
         app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,62 +27,61 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
+            android:background="@color/transparent">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/background_main"
+                android:backgroundTint="@color/mainBackGround"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tabIndicatorColor="@color/background_main" />
+                app:tabIndicatorColor="@color/mainBackGround" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/view_pager"
-        android:background="@android:color/transparent"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tool_bar">
 
     </androidx.viewpager2.widget.ViewPager2>
 
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/baseline_add_24"
-        android:backgroundTint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/mainYellowColor"
+        android:contentDescription="@string/add_new_item"
+        android:src="@drawable/add_floating_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        android:contentDescription="@string/add_new_item" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--<androidx.viewpager.widget.ViewPager-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent"-->
-<!--android:contentDescription="List of Notes and tasks"-->
-<!--android:id="@+id/view_pager">-->
+    <!--<androidx.viewpager.widget.ViewPager-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:contentDescription="List of Notes and tasks"-->
+    <!--android:id="@+id/view_pager">-->
 
-<!--<com.google.android.material.tabs.TabLayout-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="?attr/actionBarSize"-->
-<!--    android:id="@+id/"-->
-<!--    app:tabIndicatorColor="@android:color/transparent"-->
-<!--    android:background="@android:color/transparent"-->
-<!--    />-->
+    <!--<com.google.android.material.tabs.TabLayout-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="?attr/actionBarSize"-->
+    <!--    android:id="@+id/"-->
+    <!--    app:tabIndicatorColor="@android:color/transparent"-->
+    <!--    android:background="@android:color/transparent"-->
+    <!--    />-->
 
-<!--</androidx.viewpager.widget.ViewPager>-->
+    <!--</androidx.viewpager.widget.ViewPager>-->

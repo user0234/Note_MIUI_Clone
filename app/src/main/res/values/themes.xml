@@ -7,7 +7,7 @@
     </style>
 
     <style name="Theme.NoteMIUIClone" parent="Base.Theme.NoteMIUIClone" >
-        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimary">@color/mainYellowColor</item>
         <item name="android:colorSecondary">@color/white</item>
 
     </style>

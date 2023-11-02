@@ -10,5 +10,6 @@ data class ThemeItem(
     val hintTextColor: String,
     val backGroundColor: String,
     val toolBarColor: String,
-    val timeTextColor:String
+    val timeTextColor:String,
+    val noteBackgroundColor:String
 ) : Parcelable

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_cancelable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+
     android:paddingBottom="30dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:background="@android:color/transparent"
         app:cardCornerRadius="15dp"
+        android:backgroundTint="@color/dialogWhiteBackGroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +28,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"
+            android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -46,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    app:buttonTint="@color/greyDialogColorCheckBox"
                     android:visibility="visible"
                     android:layout_marginEnd="0dp"
                     />
@@ -59,7 +63,8 @@
                     android:inputType="textMultiLine"
                     android:layout_gravity="center_vertical"
                     android:text=""
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyDialogColorHint"
                     android:textSize="17sp"
                     app:layout_constrainedWidth="true" />
 
@@ -74,6 +79,7 @@
                 android:layout_marginBottom="30dp"
                 android:orientation="vertical"
                 android:visibility="visible"
+                android:background="@color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +90,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:itemCount="3"
+                    android:visibility="visible"
+                    android:background="@color/transparent"
                     tools:listitem="@layout/reminder_sub_item"/>
 
             </LinearLayout>
@@ -93,11 +101,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                android:backgroundTint="@color/sub_heading_text_color"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/transparent"
                 android:text="Done"
-                android:textColor="@color/primary"
-                android:textSize="20sp"
+                android:textColor="@color/dialogDoneButtonColor"
+                android:textSize="22sp"
                 android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/ll_sub_Item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

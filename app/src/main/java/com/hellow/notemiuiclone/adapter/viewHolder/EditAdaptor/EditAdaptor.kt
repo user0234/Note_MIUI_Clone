@@ -156,6 +156,14 @@ class EditAdaptor(private val themeItem: ThemeItem, val callback: Callback) :
         }
     }
 
+    fun stopThePlayer(pos:Int){
+        val rcv = recyclerView ?: return
+        val viewHolder = rcv.findViewHolderForAdapterPosition(pos)
+        if (viewHolder is EditAudioViewHolder) {
+            viewHolder.stopPlaying()
+        }
+    }
+
     interface Callback {
 
         fun newItemAdded(pos: Int, textCurrent: String, textNext: String)

@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.ReminderItemBinding
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
-import com.hellow.notemiuiclone.utils.Utils.getStatusTextColor
-
+import com.hellow.notemiuiclone.utils.ConstantValues
 class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>() {
 
     inner class ReminderViewHolder(val binding: ReminderItemBinding) :
@@ -58,9 +57,29 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
             }
         }
 
+        // set Color to View
+
+        if (currentItem.reminderStatus == ReminderStatus.DoneWhole) {
+            holder.binding.apply {
+                holder.binding.checkBoxMain.isChecked = true
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getGreyValue(holder.itemView.context)))
+            }
+        } else {
+            holder.binding.apply {
+                holder.binding.checkBoxMain.isChecked = false
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getBlackValue(holder.itemView.context)))
+            }
+        }
+
         holder.binding.reminderTitleMain.text = if (currentItem.title == "") {
+            holder.binding.apply {
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getGreyValue(holder.itemView.context)))
+            }
             "Checklist of subtasks"
         } else {
+            holder.binding.apply {
+                reminderTitleMain.setTextColor(Color.parseColor(ConstantValues.getBlackValue(holder.itemView.context)))
+            }
             currentItem.title
         }
 
@@ -71,17 +90,6 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
             holder.binding.reminderTime.text = currentItem.TimerTime
         }
 
-        if (currentItem.reminderStatus == ReminderStatus.NotDone) {
-            holder.binding.checkBoxMain.isChecked = false
-            holder.binding.reminderTitleMain.setTextColor(Color.parseColor(getStatusTextColor(false)))
-        } else {
-            holder.binding.reminderTitleMain.setTextColor(
-                Color.parseColor(
-                    getStatusTextColor(true)
-                )
-            )
-            holder.binding.checkBoxMain.isChecked = true
-        }
 
         if (currentItem.itemsList.isEmpty()) {
             holder.binding.llCountBox.visibility = View.GONE

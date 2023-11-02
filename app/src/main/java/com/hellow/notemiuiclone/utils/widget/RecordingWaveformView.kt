@@ -56,19 +56,19 @@ class RecordingWaveformView @JvmOverloads constructor(
         waveformPaint.style = Paint.Style.STROKE
         waveformPaint.strokeWidth = AndroidUtils.dpToPx(1)
         waveformPaint.isAntiAlias = true
-        waveformPaint.color = ContextCompat.getColor(context, R.color.md_yellow_A700)
+        waveformPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
 
         scrubberPaint.isAntiAlias = false
         scrubberPaint.style = Paint.Style.STROKE
         scrubberPaint.strokeWidth = AndroidUtils.dpToPx(2)
-        scrubberPaint.color = ContextCompat.getColor(context, R.color.md_yellow_A700)
+        scrubberPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
 
-        gridPaint.color = ContextCompat.getColor(context, R.color.md_grey_100_75)
+        gridPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
         gridPaint.strokeWidth = AndroidUtils.dpToPx(1) / 2
 
         textHeight = context.resources.getDimension(R.dimen.text_normal)
         textIndent = textHeight + PADD
-        textPaint.color = ContextCompat.getColor(context, R.color.md_grey_100)
+        textPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
         textPaint.strokeWidth = AndroidUtils.dpToPx(1)
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
@@ -145,9 +145,9 @@ class RecordingWaveformView @JvmOverloads constructor(
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
         if (selected) {
-            waveformPaint.color = ContextCompat.getColor(context, R.color.md_yellow_A700)
+            waveformPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
         } else {
-            waveformPaint.color = ContextCompat.getColor(context, R.color.md_yellow_A700)
+            waveformPaint.color = ContextCompat.getColor(context, R.color.audioItemButtonColor)
         }
     }
 

@@ -151,11 +151,10 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         viewBinding.root.setBackgroundColor(Color.parseColor(item.backGroundColor))
         // tool bar color
         viewBinding.toolbar.setBackgroundColor(Color.parseColor(item.toolBarColor))
-        viewBinding.toolbar.setTitleTextColor(Color.parseColor(item.editTextColor))
         viewBinding.toolbar.navigationIcon!!.setColorFilter(
             Color.parseColor(item.editTextColor),
             PorterDuff.Mode.SRC_ATOP
-        );
+        )
         // theme list background color
         viewBinding.listBackgroundTheme.setBackgroundColor(Color.parseColor(item.toolBarColor))
         // adding color to the keyboard shown item
@@ -257,7 +256,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     private fun audioPermissionAreAvailable() {
         isRecording = if (isRecording) {
             // Stop recording
-            if(currentRecordingItem!=null){
+            if (currentRecordingItem != null) {
                 currentRecordingItem!!.audioLength = recorder.stop()
 
                 viewBinding.softInputAboutView.visibility = View.GONE
@@ -266,7 +265,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 viewModel.addNewAudioItem(currentRecordingItem!!)
                 currentRecordingItem = null
             }
-
             false
         } else {
             // Start recoding
@@ -274,6 +272,8 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             val focusPosition: Int = getFocusPosition()
 
             if (focusPosition != -1) {
+                // stop the playing if anything is playing
+             //   adaptor.stopThePlayer(focusPosition)
                 // recoding is started here
                 recorder = AndroidAudioRecorder(applicationContext)
                 recorder.setonPlayAmplitude { amplitude, time ->
@@ -283,7 +283,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 val fileName = getFileName()
                 val audioFile = File(filesDir, fileName)
 
-                LoggingClass.logTagI("audioFileName",fileName)
+                LoggingClass.logTagI("audioFileName", fileName)
                 viewBinding.softInputAboutView.visibility = View.VISIBLE
                 viewBinding.audioRecordVisibility.visibility = View.VISIBLE
                 viewBinding.btAudio.setImageResource(R.drawable.baseline_stop_24)
@@ -405,7 +405,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         changeThemeVisibility(false)
         setUpToolBar()
         viewBinding.softInputAboutView.visibility = View.GONE
-        if(viewModel.imageButtonVisible!=-1){
+        if (viewModel.imageButtonVisible != -1) {
             viewModel.triggerHideImageButton(viewModel.imageButtonVisible)
             viewModel.imageButtonVisible = -1
         }
@@ -436,7 +436,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
     private fun setUpLiveData() {
 
-        viewModel.hideImageButtonEvent.observeEvent(this,adaptor::hideImageButton)
+        viewModel.hideImageButtonEvent.observeEvent(this, adaptor::hideImageButton)
 
         viewModel.deleteImageEvent.observeEvent(this, this::deletePhotoFromInternalStorage)
 
@@ -460,7 +460,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     private fun setUpAdaptor() {
-        adaptor = EditAdaptor(ConstantValues.themeList[1], viewModel)
+        adaptor = EditAdaptor(ConstantValues.themeList[0], viewModel)
         viewBinding.rvDescription.adapter = adaptor
 
         viewBinding.rvDescription.layoutManager = LinearLayoutManager(

@@ -5,6 +5,17 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object Utils {
+
+    fun getTimer(value:Int):String{
+         if (value < 10){
+            return "0:0$value"
+         }
+        if(value <60){
+            return "0:$value"
+        }
+        return "$value"
+    }
+
     fun dateFormatterNotesList(date: String, currentTIme: String): String {
         val pattern = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")
         val createdDateTime = LocalDateTime.parse(date, pattern)
@@ -44,40 +55,9 @@ object Utils {
         return createdDateTime.format(format)
     }
 
-    const val GreyColor: String = "#3B3B3A"
-    const val YellowColor: String = "#5BFFE819"
-
-    fun titleColor(id: Int): String {
-
-        return "#000000"
-    }
-
-    fun backgroundColor(id: Int): String {
-
-        return "#ffffff"
-    }
-
-    fun subTitleColor(id: Int): String {
-        return "#3d3d3d"
-    }
-
-    fun toolBarColor(id: Int): String {
-        return "#ababab"
-    }
+    const val GreyColor: String = "#656565"
+    const val YellowColor: String = "#E5B00D"
 
     val NOTE_ITEM_LIST = "NoteItemList"
-    val NOTE_ITEM_CREATE = "NoteItemCreate"
 
-    val themeListData: List<ThemeItemData> = listOf<ThemeItemData>(
-        ThemeItemData("#F4E2E2", "#000000", "#33000000"),
-        ThemeItemData("#ABBCDA", "#072963", "#333B69DC"),
-
-        )
-
-    fun getStatusTextColor(value: Boolean): String {
-        if (!value) {
-            return "#111111"
-        }
-        return "#656561"
-    }
 }

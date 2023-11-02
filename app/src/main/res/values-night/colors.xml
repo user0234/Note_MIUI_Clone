@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#FCFF55</color>
-    <color name="heading_text_color">#111111</color>
-    <color name="sub_heading_text_color">#3B3B3A</color>
-    <color name="label_text_color">#656561</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background_main">#DCDCCF</color>
-    <color name="black">#FF000000</color>
+    // new and accurate Colors
+    <color name="mainYellowColor">#F3B120</color>
+
+    <color name="black">#CBCBCB</color>
+    <color name="greySubText">#D7D7D7</color>
+    <color name="greySubText2">#797979</color>
+    <color name="white">#FEFEFE</color>
+    <color name="mainBackGround">#000000</color> // not done
+    <color name="greyDialogColorHint">#626464</color>
+    <color name="greyDialogColorCheckBox">#B4BABD</color>
+    <color name="greyDialogCheckTextColor">#5A5A5A</color>
+    <color name="greyDialogSupportItemColor">#4C4C4C</color>
+    <color name="dialogTextColor">#CBCBCB</color>
+
+    <color name="greyDialogShowMoreButtonColor">#4A4A4A</color>
+    <color name="greyDialogShowMoreBackgroundColor">#2B2B2B</color>
+    <color name="dialogWhiteBackGroundColor">#1E1E1E</color>
+    <color name="dialogDoneButtonColor">#E5B00D</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="emptyListTextColor">#656565</color>
+    <color name="emptyListIconBackGround">#212121</color>
+
+    <color name="dialogShowMoreButtonColor">#6B6B6B</color>
+
+
+    // Edit text colors
+    <color name="titleColor">#202020</color>
+    <color name="timeColor">#969696</color>
+    <color name="titleHintColor">#D1D1D1</color>
+    <color name="backgroundColor">#FEFEFE</color>
+    // add transparency
+    <color name="themeItemBackgroundColor">#FDFCFD</color>
+    // edit text list item colors
+    <color name="listItemTextColor">#212121</color>
+    <color name="listItemCheckedTextColor">#989898</color>
+    <color name="listItemCheckBoxColor">#F5BF08</color>
+    // audio item
+    <color name="audioItemBackgroundColor">#FBF7E4</color>
+    <color name="audioItemButtonColor">#F5BD07</color>
+
+    // getImage Dialog
+    <color name="dialogBackgroundEmptyColor">#4DDCD4DC</color>
+    <color name="imageDialogBackgroundColor">#FEFEFE</color>
+    <color name="imageDialogCancelColor">#EEEEEE</color>
 
 </resources>

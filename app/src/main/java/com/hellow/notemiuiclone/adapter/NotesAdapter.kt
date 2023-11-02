@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.NotesListItemBinding
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.utils.ConstantValues
 import com.hellow.notemiuiclone.utils.Utils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -48,6 +49,7 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
             )
         )
     }
+
     override fun onBindViewHolder(holder: NotesAdapter.NotesViewHolder, position: Int) {
 
         val currentItem = notesDiffer.currentList[position]
@@ -62,34 +64,28 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
                 .toString()
         holder.binding.tvTime.text =
             Utils.dateFormatterNotesList(currentItem.recentChangeDate, currentTime)
+
+        val themeItem = ConstantValues.getThemeNoteList(holder.itemView.context,currentItem.themeId)
         holder.binding.root.setCardBackgroundColor(
             (Color.parseColor(
-                Utils.backgroundColor(
-                    currentItem.themeId
-                )
+                themeItem.noteBackgroundColor
             ))
         )
         holder.binding.tvTime.setTextColor(
             (Color.parseColor(
-                Utils.subTitleColor(
-                    currentItem.themeId
-                )
+                themeItem.timeTextColor
             ))
         )
 
         holder.binding.tvTitle.setTextColor(
             (Color.parseColor(
-                Utils.titleColor(
-                    currentItem.themeId
-                )
+                themeItem.editTextColor
             ))
         )
 
         holder.binding.tvSubtitle.setTextColor(
             (Color.parseColor(
-                Utils.subTitleColor(
-                    currentItem.themeId
-                )
+                themeItem.timeTextColor
             ))
         )
         holder.itemView.setOnClickListener {

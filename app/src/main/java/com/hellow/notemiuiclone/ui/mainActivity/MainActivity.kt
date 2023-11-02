@@ -69,14 +69,6 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
 
-     //  createSnackBar("tab count ${viewBinding.tabLayout.tabCount}")
-        viewBinding.tabLayout.tabCount
-//        viewBinding.tabLayout.addTab(
-//            viewBinding.tabLayout.newTab().setIcon(R.drawable.note_icon_yellow)
-//        )
-//        viewBinding.tabLayout.addTab(
-//            viewBinding.tabLayout.newTab().setIcon(R.drawable.task_icon))
-
 
         viewBinding.fabCreate.setOnClickListener {
 
