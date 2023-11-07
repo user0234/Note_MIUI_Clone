@@ -7,6 +7,8 @@ Features
 - Notes with image storage
 - Notes with Audio storage
 - Notes with personalized theme
+- custom visualizer play audio
+- custom visualizer when recording
 
 apk link - https://drive.google.com/drive/folders/1rDpNLISKkRIqZahKEbBSe2Pt-49O2htH?usp=sharing
 
