@@ -9,6 +9,7 @@ Features
 - Notes with personalized theme
 - custom visualizer play audio
 - custom visualizer when recording
+- Themed Notes 
 
 apk link - https://drive.google.com/drive/folders/1rDpNLISKkRIqZahKEbBSe2Pt-49O2htH?usp=sharing
 
