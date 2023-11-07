@@ -9,7 +9,8 @@ Features
 - Notes with personalized theme
 - custom visualizer play audio
 - custom visualizer when recording
-- Themed Notes 
+- Themed Notes
+- Live Data to Update the list items
 
 apk link - https://drive.google.com/drive/folders/1rDpNLISKkRIqZahKEbBSe2Pt-49O2htH?usp=sharing
 
