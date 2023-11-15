@@ -1,6 +1,7 @@
 package com.hellow.notemiuiclone.ui.editActivity
 
 import android.Manifest
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -57,7 +58,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     private lateinit var viewBinding: ActivityCreatEditBinding
     private lateinit var viewModel: CreatEditViewModel
     private lateinit var adaptor: EditAdaptor
-    private lateinit var noteItemReceived: NoteItem
+    private var noteItemReceived: NoteItem? = null
     private var isFocused = false
     private lateinit var themeAdapter: ThemeAdaptor
     private lateinit var takePhoto: ActivityResultLauncher<Void?>
@@ -77,11 +78,15 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 intent.getParcelableExtra(
                     NOTE_ITEM_LIST,
                     NoteItem::class.java
-                )!!
+                )
 
             } else {
-                intent.getParcelableExtra("noteItem")!!
+                intent.getParcelableExtra(NOTE_ITEM_LIST)
 
+            }
+            if(noteItemReceived==null){
+                // ReInstall the App
+                finish()
             }
         } else {
             // kill the activity if note item not found
@@ -111,11 +116,11 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         //  setUpChangeItemType()
         setUpSoftInputButton()
         viewBinding.softInputAboutView.visibility = View.GONE
-        changeThemeInView(noteItemReceived.themeId)
+        changeThemeInView(noteItemReceived!!.themeId)
     }
 
     private fun setUpThemeDataAndAdaptor() {
-        themeAdapter = ThemeAdaptor(noteItemReceived.themeId)
+        themeAdapter = ThemeAdaptor(noteItemReceived!!.themeId)
 
         viewBinding.listBackgroundTheme.adapter = themeAdapter
         viewBinding.listBackgroundTheme.layoutManager = LinearLayoutManager(
@@ -273,7 +278,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
             if (focusPosition != -1) {
                 // stop the playing if anything is playing
-             //   adaptor.stopThePlayer(focusPosition)
+                adaptor.stopThePlayer(focusPosition)
                 // recoding is started here
                 recorder = AndroidAudioRecorder(applicationContext)
                 recorder.setonPlayAmplitude { amplitude, time ->
@@ -392,7 +397,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             // set the text in viewModel
             viewModel.setTitle(it.toString())
         }
-        viewBinding.etTitle.setText(noteItemReceived.title)
+        viewBinding.etTitle.setText(noteItemReceived!!.title)
         viewBinding.etTitle.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 titleFocused()
@@ -477,7 +482,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     // setUp initial data to the view
     private fun setUpViewData() {
 
-        viewBinding.tvTime.text = ConstantValues.dateConvert(noteItemReceived.id)
+        viewBinding.tvTime.text = ConstantValues.dateConvert(noteItemReceived!!.id)
 
     }
 
@@ -485,7 +490,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     private fun setUpViewModel() {
         val notesRepository = NotesRepository(NotesDataBase(this)!!)
         val viewModelProviderFactory =
-            CreatEditViewModelProvider(application, notesRepository, noteItemReceived)
+            CreatEditViewModelProvider(application, notesRepository, noteItemReceived!!)
         viewModel =
             ViewModelProvider(this, viewModelProviderFactory)[CreatEditViewModel::class.java]
     }
@@ -526,12 +531,47 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 onMenuDoneButtonClicked()
             }
 
+            R.id.menu_item_share_text -> {
+                // share the note as text
+                shareNoteText()
+
+            }
+
             android.R.id.home -> {
                 finish()
             }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun getAllTextData():String {
+
+        return viewModel.returnAllText()
+
+    }
+
+    private fun getAllImageURiList():ArrayList<Uri>?{
+        return viewModel.returnAllImageUri()
+    }
+
+    private fun shareNoteText() {
+        // TODO Images not working for whats app
+        val textValue = getAllTextData()
+        val imageUris:ArrayList<Uri>? = getAllImageURiList()
+
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND_MULTIPLE
+            putExtra(Intent.EXTRA_TEXT, textValue)
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            type = "*/*"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, "${imageUris?.size} sdf")
+        startActivity(shareIntent)
+    }
+
 
     private fun changeThemeVisibility(isVisible: Boolean) {
         if (isVisible) {

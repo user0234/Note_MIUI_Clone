@@ -1,6 +1,5 @@
 package com.hellow.notemiuiclone.utils
 
-import com.hellow.notemiuiclone.models.ThemeItemData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

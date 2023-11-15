@@ -11,6 +11,8 @@ data class NoteSubItem(
     var type:NoteSubItemType,
     var checkBox:Boolean = false, // false for all the types other then checkbox
     var textValue:String = "",
+   // var textSize:Float = 0F,
+  //  var isTextBold:Boolean = false,
     var imageUri:String? = null,
     var imageDescription:String? = null,
     var imageFileName:String? = null,

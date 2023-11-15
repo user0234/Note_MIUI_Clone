@@ -62,12 +62,12 @@ class CreatEditViewModel(
 
 
     private val _editItems =
-        MutableLiveData<MutableList<NoteSubItem>>(currentItem.description.toMutableList())
+        MutableLiveData(currentItem.description.toMutableList())
     val editItems: LiveData<out List<NoteSubItem>>
         get() = _editItems
 
     private val _title =
-        MutableLiveData<String>(currentItem.title)
+        MutableLiveData(currentItem.title)
     val title: LiveData<String>
         get() = _title
 
@@ -169,6 +169,35 @@ class CreatEditViewModel(
             repository.updateNote(currentNote)
         }
 
+    }
+
+    fun returnAllImageUri():ArrayList<Uri>?{
+        val uriList: ArrayList<Uri> = ArrayList()
+
+        for (i in listItems) {
+            if (i.type == NoteSubItemType.Image) {
+                uriList.add(Uri.parse(i.imageUri!!))
+            }
+        }
+
+        return if(uriList.isEmpty()){
+            null
+        }else{
+            uriList
+        }
+    }
+
+    fun returnAllText():String {
+
+        var textValue:String = ""
+        textValue = title.value ?: ""
+        for (i in listItems) {
+            if (i.textValue.isNotBlank()) {
+                textValue = textValue + "\n" + i.textValue
+            }
+        }
+
+        return textValue
     }
 
     override fun newItemAdded(pos: Int, textCurrent: String, textNext: String) {
@@ -329,7 +358,6 @@ class CreatEditViewModel(
     override fun deleteImageItem(item: NoteSubItem) {
         listItems.removeAt(item.id)
         updateListItems()
-        // TODO delete the image from directory using name
         // delete the image from repository
         _deleteImageEvent.send(DeleteImageItem(item.imageFileName!!))
     }

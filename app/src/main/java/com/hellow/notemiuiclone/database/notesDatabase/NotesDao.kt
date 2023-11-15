@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
-import com.hellow.notemiuiclone.models.NoteStatus
 
 @Dao
 interface NotesDao {

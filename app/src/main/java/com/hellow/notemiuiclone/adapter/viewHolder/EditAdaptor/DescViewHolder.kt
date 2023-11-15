@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
@@ -45,6 +46,8 @@ class CheckBoxItemViewHolder(
     private val editText = binding.etText
     private val checkBox = binding.checkBox
     private var itemValue: NoteSubItem? = null
+    private var isBoldChecked:Boolean = false
+    private var currentText:String = ""
 
     init {
         editText.setOnFocusChangeListener { view, hasFocus ->
@@ -57,7 +60,7 @@ class CheckBoxItemViewHolder(
             } else {
                 val pos = bindingAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
-                    callback.focusLose(pos, editText.text.toString())
+                    callback.focusLose(pos, currentText)
                 }
                 // we lost focus from this item
 
@@ -73,11 +76,48 @@ class CheckBoxItemViewHolder(
                 if (pos != RecyclerView.NO_POSITION) {
                     callback.textChanged(pos, s.toString())
                 }
+                 Log.i("edit_text","startLoc- ${start}, beforeLoc- ${before}")
+
+                if(start in 7..15){
+                    if(!isBoldChecked){
+                        isBoldChecked = true
+                    }
+                }else{
+                    isBoldChecked = false
+                }
+
+                if(start>=7){
+                    // do bold the new one
+                     //   binding.etText.setText(Html.fromHtml(s.toString() + "<B>X</B><B>y</B><B>z</B>"))
+                }
+
+                if(isBoldChecked){
+
+                    if(!s.toString().endsWith("</B>")&&(before==0)){
+
+                        val newItem = s.toString()[start]
+                        var newText =  Html.fromHtml(s.toString()).toString()
+                        Log.i("edit_text","newitem- ${newItem}, newText- ${newText}")
+                        newText = newText.removeSuffix(newItem.toString()) +"<B>$newItem</B>"
+                        Log.i("edit_text","newTextWithAdded- ${newText}")
+                        binding.etText.setText(Html.fromHtml(newText))
+                        binding.etText.setSelection(start+1)
+
+                    }
+                //   binding.etText.setText()
+                }
 
             }
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
+
+                // TODO add a text size change as miui from activity
+                if(text.contains("+")){
+                  //  binding.etText.textSize = 24F
+
+                }
+
                 if (text.contains("\n")) {
                     var newLinePos: Int = 0
                     while (newLinePos < text.length) {
@@ -128,7 +168,8 @@ class CheckBoxItemViewHolder(
 
     fun bind(item: NoteSubItem, themeItem: ThemeItem) {
         itemValue = item
-        editText.setText(item.textValue)
+        currentText = item.textValue
+        editText.setText(currentText)
         checkBox.isChecked = item.checkBox
         if (item.type == NoteSubItemType.String) {
             checkBox.visibility = View.GONE

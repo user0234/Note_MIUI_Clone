@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
-import com.hellow.notemiuiclone.models.NoteStatus
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
