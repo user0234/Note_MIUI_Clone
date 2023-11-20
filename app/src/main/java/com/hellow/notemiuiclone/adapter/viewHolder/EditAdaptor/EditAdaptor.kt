@@ -18,6 +18,14 @@ import com.hellow.notemiuiclone.ui.editActivity.CreatEditViewModel
 class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object {
+        /***
+         * Log tags
+         */
+        const val CHECK_TAG = "check tag value"
+        const val SIZE_TAG = "size tag"
+    }
+
     private var pendingFocusChange: CreatEditViewModel.FocusChange? = null
 
     private var recyclerView: RecyclerView? = null
@@ -110,22 +118,40 @@ class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
     }
 
     fun changeCheckVisibility(checkboxVisible: CreatEditViewModel.CheckBoxVisibility) {
+
+        Log.i(CHECK_TAG,"pending focus - ${pendingFocusChange?.pos?:"null"} , check pos - ${checkboxVisible.pos}")
         val rcv = recyclerView ?: return
         val viewHolder = rcv.findViewHolderForAdapterPosition(checkboxVisible.pos)
         if (viewHolder is EditFocusableViewHolder) {
             viewHolder.showCheckBox()
         } else {
-            return
+            if(pendingFocusChange!=null){
+                val viewHolder2 = rcv.findViewHolderForAdapterPosition(pendingFocusChange!!.pos)
+                if (viewHolder2 is EditFocusableViewHolder) {
+                    viewHolder2.showCheckBox()
+                }else{
+                    return
+                }
+            }
         }
     }
 
     fun changeTextSize(changeSizeType:CreatEditViewModel.ChangeSizeEventData){
+        Log.i(SIZE_TAG,"pending focus - ${pendingFocusChange?.pos?:"null"} , check pos - ${changeSizeType.pos}")
+
         val rcv = recyclerView ?: return
         val viewHolder = rcv.findViewHolderForAdapterPosition(changeSizeType.pos)
         if (viewHolder is EditFocusableViewHolder) {
             viewHolder.changeSize(changeSizeType.change)
         } else {
-            return
+            if(pendingFocusChange!=null){
+                val viewHolder2 = rcv.findViewHolderForAdapterPosition(pendingFocusChange!!.pos)
+                if (viewHolder2 is EditFocusableViewHolder) {
+                    viewHolder2.changeSize(changeSizeType.change)
+                }else{
+                    return
+                }
+            }
         }
     }
 

@@ -187,6 +187,9 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     private fun setUpSoftInputButton() {
+        /***
+         * show or hide the check value in itemView
+         */
         viewBinding.btCheckBox.setOnClickListener {
             viewModel.changeCheckBoxVisibility()
         }
@@ -249,11 +252,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     private fun getFileName() = UUID.randomUUID().toString()
-
-    private fun saveRecordingFiles() {
-        TODO("Not yet implemented")
-    }
-
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
         when (requestCode) {

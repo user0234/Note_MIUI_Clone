@@ -178,10 +178,8 @@ class CheckBoxItemViewHolder(
     override fun showCheckBox() {
         if (checkBox.visibility == View.GONE) {
             checkBox.visibility = View.VISIBLE
-            editText.showKeyboard()
         } else {
             checkBox.visibility = View.GONE
-            editText.showKeyboard()
         }
     }
 

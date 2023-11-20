@@ -21,13 +21,15 @@ import com.hellow.notemiuiclone.utils.Event
 import com.hellow.notemiuiclone.utils.LoggingClass
 import com.hellow.notemiuiclone.utils.send
 import kotlinx.coroutines.launch
-import timber.log.Timber
-
 class CreatEditViewModel(
     val app: Application,
     private val repository: NotesRepository,
     private val currentItem: NoteItem,
 ) : AndroidViewModel(app), EditAdaptor.Callback {
+    companion object {
+        const val TAG_FOCUS = "FocusTag"
+        const val TAG_CHECK = "CheckBoxTag"
+    }
 
     // to handle focus request
     private val _focusEvent = MutableLiveData<Event<FocusChange>>()
@@ -42,22 +44,24 @@ class CreatEditViewModel(
     val checkBoxVisibilityEvent: LiveData<Event<CheckBoxVisibility>>
         get() = _checkBoxVisibilityEvent
 
-    fun changeCheckBoxVisibility() {
-        var currentCheck = "String"
-        if (listItems[focusPosition].type == NoteSubItemType.CheckBox) {
-            currentCheck = "CheckBox"
+    override fun checkChanged(pos: Int, isChecked: Boolean) {
+        listItems[pos].checkBox = isChecked
+        Log.i("Check Changed", "Current Check - ${isChecked}")
+        listItems[focusPosition].type = if(isChecked){
+            NoteSubItemType.CheckBox
+        }else {
+            NoteSubItemType.String
         }
-        Log.i("Check Changed", "Current Check - ${currentCheck}")
-
-        _checkBoxVisibilityEvent.send(CheckBoxVisibility(focusPosition))
-        listItems[focusPosition].type =
             if (listItems[focusPosition].type == NoteSubItemType.String) {
                 NoteSubItemType.CheckBox
             } else {
                 NoteSubItemType.String
             }
-
         updateListItems()
+    }
+
+    fun changeCheckBoxVisibility() {
+        _checkBoxVisibilityEvent.send(CheckBoxVisibility(focusPosition))
     }
 
 
@@ -265,7 +269,7 @@ class CreatEditViewModel(
             focusItemAt(pos - 1, focusLoc, true)
         } else {
             val focusLoc = listItems[pos - 1].textValue.length
-            Timber.tag("Item Delete").i("text at  %s", listItems[pos - 1].textValue)
+            Log.i("Item Delete","text at  %s")
 
             val textValue = listItems[pos - 1].textValue + text
             listItems[pos - 1].textValue = textValue
@@ -297,7 +301,7 @@ class CreatEditViewModel(
 
         updateListItems()
 
-        focusPosition = -1
+//        focusPosition = -1
         focusLastPositionForImage = pos
     }
 
@@ -315,10 +319,6 @@ class CreatEditViewModel(
     fun triggerHideImageButton(pos: Int) {
         LoggingClass.logTagI("imageHideTag", "imageHide triggered")
         _hideImageButtonEvent.send(HideImageButton(pos))
-    }
-
-    override fun checkChanged(pos: Int, isChecked: Boolean) {
-        listItems[pos].checkBox = isChecked
     }
 
     override fun textChanged(pos: Int, text: String) {
