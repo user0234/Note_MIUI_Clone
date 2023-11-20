@@ -98,7 +98,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 val photoId = UUID.randomUUID().toString()
                 val isSavedSuccessfully = savePhotoToInternalStorage(photoId, it)
                 if (isSavedSuccessfully) {
-                    // TODO save the file name and uri of the image and then add them to the view model
                     addSavedImageToList(photoId)
                 } else {
                     Toast.makeText(this, "Failed to save photo", Toast.LENGTH_SHORT).show()
@@ -109,12 +108,13 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         setUpViewModel()
         setUpToolBar()
         setUpViewData()
-        setUpAdaptor()
+        setUpEditListAdaptor()
         setUpLiveData()
         setUpTitleData()
         setUpThemeDataAndAdaptor()
         //  setUpChangeItemType()
         setUpSoftInputButton()
+        setUpSoftInputTextButtons()
         viewBinding.softInputAboutView.visibility = View.GONE
         changeThemeInView(noteItemReceived!!.themeId)
     }
@@ -127,7 +127,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             this,
             LinearLayoutManager.HORIZONTAL, false
         )
-        // size will be changing
         viewBinding.listBackgroundTheme.setHasFixedSize(true)
         themeAdapter.differ.submitList(viewModel.getAllThemes())
         themeAdapter.setOnItemClickListener { item ->
@@ -170,6 +169,23 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         adaptor.notifyDataSetChanged()
     }
 
+    private fun setUpSoftInputTextButtons() {
+        viewBinding.btIncreaseSize.setOnClickListener {
+            /***
+             * this will update the size of text by just send an trigger and the size parameters will be handled by holder itself
+             */
+                viewModel.increaseTextSize()
+        }
+        viewBinding.btDecreaseSize.setOnClickListener {
+            /***
+             * this will update the size of text by just send an trigger and the size parameters will be handled by holder itself
+             */
+            viewModel.decreaseTextSize()
+
+        }
+
+    }
+
     private fun setUpSoftInputButton() {
         viewBinding.btCheckBox.setOnClickListener {
             viewModel.changeCheckBoxVisibility()
@@ -204,6 +220,32 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 requestMicPermission()
             }
         }
+
+        /***
+         * check if the trigger button text are visible
+         * if visible then make them invisible and vice versa
+         */
+        viewBinding.btTextVisibility.setOnClickListener {
+             if(viewBinding.triggerButtonsText.visibility == View.VISIBLE){
+                 // hide
+                 hideTextChangeSoftInput()
+              }else{
+                  // show
+                 showTextChangeSoftInput()
+             }
+        }
+    }
+
+    private fun showTextChangeSoftInput(){
+        viewBinding.triggerButtonsText.visibility = View.VISIBLE
+        viewBinding.btTextVisibility.setImageResource(R.drawable.baseline_clear_24)
+        viewBinding.triggerButtons.visibility = View.GONE
+    }
+
+    private fun hideTextChangeSoftInput(){
+        viewBinding.triggerButtonsText.visibility = View.GONE
+        viewBinding.btTextVisibility.setImageResource(R.drawable.baseline_format_size_24)
+        viewBinding.triggerButtons.visibility = View.VISIBLE
     }
 
     private fun getFileName() = UUID.randomUUID().toString()
@@ -223,36 +265,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
             }
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        when (requestCode) {
-            PERMISSION_AUDIO_REQUEST_CODE -> {
-                if (hasMicPermission()) {
-                    audioPermissionAreAvailable()
-                }
-            }
-
-            PERMISSION_IMAGE_REQUEST_CODE -> {
-
-            }
-        }
-    }
-
-    private fun requestMicPermission() {
-        EasyPermissions.requestPermissions(
-            this, "Audio Permission is required for recording audio",
-            PERMISSION_AUDIO_REQUEST_CODE, Manifest.permission.RECORD_AUDIO
-        )
     }
 
     private fun hasMicPermission() =
@@ -294,7 +306,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 viewBinding.btAudio.setImageResource(R.drawable.baseline_stop_24)
                 recorder.start(audioFile)
                 currentRecordingItem = NoteSubItem(
-                    focusPosition, NoteSubItemType.Audio, false, "", null, null, null,
+                    focusPosition, NoteSubItemType.Audio, false, "", 18F, null, null, null,
                     fileName, audioFile.toUri().toString(), null
                 )
                 true
@@ -462,9 +474,10 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
         viewModel.checkBoxVisibilityEvent.observeEvent(this, adaptor::changeCheckVisibility)
 
+        viewModel.changeTextSizeEvent.observeEvent(this,adaptor::changeTextSize)
     }
 
-    private fun setUpAdaptor() {
+    private fun setUpEditListAdaptor() {
         adaptor = EditAdaptor(ConstantValues.themeList[0], viewModel)
         viewBinding.rvDescription.adapter = adaptor
 
@@ -544,20 +557,20 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getAllTextData():String {
+    private fun getAllTextData(): String {
 
         return viewModel.returnAllText()
 
     }
 
-    private fun getAllImageURiList():ArrayList<Uri>?{
+    private fun getAllImageURiList(): ArrayList<Uri>? {
         return viewModel.returnAllImageUri()
     }
 
     private fun shareNoteText() {
         // TODO Images not working for whats app
         val textValue = getAllTextData()
-        val imageUris:ArrayList<Uri>? = getAllImageURiList()
+        val imageUris: ArrayList<Uri>? = getAllImageURiList()
 
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND_MULTIPLE
@@ -612,6 +625,36 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         viewBinding.removeFocusText.clearFocus()
         viewBinding.removeFocusText.hideKeyboard()
         viewBinding.softInputAboutView.visibility = View.GONE
+        hideTextChangeSoftInput()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        when (requestCode) {
+            PERMISSION_AUDIO_REQUEST_CODE -> {
+                if (hasMicPermission()) {
+                    audioPermissionAreAvailable()
+                }
+            }
+
+            PERMISSION_IMAGE_REQUEST_CODE -> {
+
+            }
+        }
+    }
+    private fun requestMicPermission() {
+        EasyPermissions.requestPermissions(
+            this, "Audio Permission is required for recording audio",
+            PERMISSION_AUDIO_REQUEST_CODE, Manifest.permission.RECORD_AUDIO
+        )
     }
 
     override fun onStop() {

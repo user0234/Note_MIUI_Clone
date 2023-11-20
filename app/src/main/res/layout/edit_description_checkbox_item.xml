@@ -30,6 +30,7 @@
         android:lineHeight="35dp"
         android:text="cffcvcvc"
         android:minHeight="48dp"
+        android:textColorHint="@color/titleHintColor"
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp"

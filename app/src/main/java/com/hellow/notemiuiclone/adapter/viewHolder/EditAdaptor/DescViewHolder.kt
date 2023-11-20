@@ -27,6 +27,7 @@ import com.hellow.notemiuiclone.utils.showKeyboard
 sealed interface EditFocusableViewHolder {
     fun setFocus(pos: Int)
     fun showCheckBox()
+    fun changeSize(increase: Boolean)
 }
 
 sealed interface EditImageViewHolder {
@@ -40,17 +41,18 @@ sealed interface EditAudioViewHolder {
 
 class CheckBoxItemViewHolder(
     binding: EditDescriptionCheckboxItemBinding,
-    callback: EditAdaptor.Callback,
+    val callback: EditAdaptor.Callback,
 ) : RecyclerView.ViewHolder(binding.root), EditFocusableViewHolder {
 
     private val editText = binding.etText
     private val checkBox = binding.checkBox
     private var itemValue: NoteSubItem? = null
-    private var isBoldChecked:Boolean = false
-    private var currentText:String = ""
+    private var isBoldChecked: Boolean = true
+    private var currentText: String = ""
+    private var currentSize: Float? = null
 
     init {
-        editText.setOnFocusChangeListener { view, hasFocus ->
+        editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val pos = bindingAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
@@ -60,7 +62,7 @@ class CheckBoxItemViewHolder(
             } else {
                 val pos = bindingAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
-                    callback.focusLose(pos, currentText)
+                    callback.focusLose(pos, currentText, currentSize ?: 18F)
                 }
                 // we lost focus from this item
 
@@ -76,47 +78,16 @@ class CheckBoxItemViewHolder(
                 if (pos != RecyclerView.NO_POSITION) {
                     callback.textChanged(pos, s.toString())
                 }
-                 Log.i("edit_text","startLoc- ${start}, beforeLoc- ${before}")
 
-                if(start in 7..15){
-                    if(!isBoldChecked){
-                        isBoldChecked = true
-                    }
-                }else{
-                    isBoldChecked = false
-                }
+                /***
+                 * todo the boldness we use before and count , where count = 1, before 0
+                 */
 
-                if(start>=7){
-                    // do bold the new one
-                     //   binding.etText.setText(Html.fromHtml(s.toString() + "<B>X</B><B>y</B><B>z</B>"))
-                }
-
-                if(isBoldChecked){
-
-                    if(!s.toString().endsWith("</B>")&&(before==0)){
-
-                        val newItem = s.toString()[start]
-                        var newText =  Html.fromHtml(s.toString()).toString()
-                        Log.i("edit_text","newitem- ${newItem}, newText- ${newText}")
-                        newText = newText.removeSuffix(newItem.toString()) +"<B>$newItem</B>"
-                        Log.i("edit_text","newTextWithAdded- ${newText}")
-                        binding.etText.setText(Html.fromHtml(newText))
-                        binding.etText.setSelection(start+1)
-
-                    }
-                //   binding.etText.setText()
-                }
 
             }
 
             override fun afterTextChanged(s: Editable?) {
                 val text = s.toString()
-
-                // TODO add a text size change as miui from activity
-                if(text.contains("+")){
-                  //  binding.etText.textSize = 24F
-
-                }
 
                 if (text.contains("\n")) {
                     var newLinePos: Int = 0
@@ -168,7 +139,11 @@ class CheckBoxItemViewHolder(
 
     fun bind(item: NoteSubItem, themeItem: ThemeItem) {
         itemValue = item
+        currentSize = item.textSize
+        editText.textSize = item.textSize
+
         currentText = item.textValue
+
         editText.setText(currentText)
         checkBox.isChecked = item.checkBox
         if (item.type == NoteSubItemType.String) {
@@ -179,6 +154,19 @@ class CheckBoxItemViewHolder(
         // set themeValue
         editText.setTextColor(Color.parseColor(themeItem.editTextColor))
         editText.setHintTextColor(Color.parseColor(themeItem.hintTextColor))
+
+        if(item.id==0){
+            /***
+             * set the hint text for first position
+             */
+            editText.hint = "Start Typing ..."
+        }else{
+            /***
+             * hide the hint for other position
+             */
+            editText.hint = ""
+        }
+
     }
 
     override fun setFocus(pos: Int) {
@@ -190,10 +178,39 @@ class CheckBoxItemViewHolder(
     override fun showCheckBox() {
         if (checkBox.visibility == View.GONE) {
             checkBox.visibility = View.VISIBLE
+            editText.showKeyboard()
         } else {
             checkBox.visibility = View.GONE
+            editText.showKeyboard()
         }
     }
+
+    /***
+     * if @param increase is true then we increase not more then x sp
+     * else we decrease not less then y sp
+     * we change by a factor of 2
+     */
+    override fun changeSize(increase: Boolean) {
+        if (increase) {
+            if (currentSize != 26F) {
+                val newSize = currentSize?.plus(2F) ?: 18F
+                currentSize = newSize
+                editText.textSize = newSize
+                callback.changeTextSize(newSize)
+            }
+
+        } else {
+            if (currentSize != 16F) {
+                val newSize = currentSize?.minus(2F) ?: 18F
+                currentSize = newSize
+                editText.textSize = newSize
+                callback.changeTextSize(newSize)
+
+
+            }
+        }
+    }
+
 
 }
 
@@ -212,9 +229,9 @@ class EditDescriptionImageItemViewHolder(
     init {
 
         binding.imageView.setOnClickListener {
-            LoggingClass.logTagI("focusImage","focus set on image")
-                binding.buttonsView.visibility = View.VISIBLE
-                binding.imageView.strokeWidth = 5f
+            LoggingClass.logTagI("focusImage", "focus set on image")
+            binding.buttonsView.visibility = View.VISIBLE
+            binding.imageView.strokeWidth = 5f
             callback.imageItemFocused(itemValue!!.id)
         }
 
@@ -348,28 +365,29 @@ class EditDescriptionImageItemViewHolder(
     }
 
     override fun hideImageButton() {
-        LoggingClass.logTagI("imageHideTag","imageHide reach")
+        LoggingClass.logTagI("imageHideTag", "imageHide reach")
         binding.buttonsView.visibility = View.GONE
         binding.imageView.strokeWidth = 0f
     }
 }
 
 class EditDescriptionAudioItemViewHolder(
-   val binding: EditDescriptionAudioItemBinding,
+    val binding: EditDescriptionAudioItemBinding,
     callback: EditAdaptor.Callback,
-) : RecyclerView.ViewHolder(binding.root) ,EditAudioViewHolder{
+) : RecyclerView.ViewHolder(binding.root), EditAudioViewHolder {
 
     private val timerText = binding.timer
     var player: MyAudioPlayer? = null
-    var playing:Boolean = false
-    private var currentItem:NoteSubItem? = null
+    var playing: Boolean = false
+    private var currentItem: NoteSubItem? = null
+
     init {
         binding.btPlay.setOnClickListener {
             // play using the uri
-            if(currentItem!= null){
-                if(!playing){
+            if (currentItem != null) {
+                if (!playing) {
                     player = MyAudioPlayer(binding.root.context.applicationContext)
-                    player!!.playFile(Uri.parse(currentItem!!.audioFileUri),binding.visualizer)
+                    player!!.playFile(Uri.parse(currentItem!!.audioFileUri), binding.visualizer)
                     binding.btPlay.setImageResource(R.drawable.baseline_stop_24)
                     playing = true
                     player!!.setonPlayerStop {
@@ -379,12 +397,12 @@ class EditDescriptionAudioItemViewHolder(
                     player!!.setonPlayAmplitude { timer ->
 
                         if (timer != null) {
-                            binding.timer.text = Utils.getTimer((timer/1000))
-                        }else {
+                            binding.timer.text = Utils.getTimer((timer / 1000))
+                        } else {
                             binding.timer.text = currentItem!!.audioLength.toString()
                         }
                     }
-                }else {
+                } else {
                     player?.stop()
                     binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
                     playing = false
@@ -403,17 +421,17 @@ class EditDescriptionAudioItemViewHolder(
 
     fun bind(item: NoteSubItem) {
         currentItem = item
-        timerText.text = (item.audioLength!!/1000).toString()
+        timerText.text = (item.audioLength!! / 1000).toString()
     }
 
     override fun stopPlaying() {
-         if(player!=null){
-             player?.stop()
-             binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
-             playing = false
-             player = null
-             binding.timer.text = currentItem!!.audioLength.toString()
-         }
+        if (player != null) {
+            player?.stop()
+            binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
+            playing = false
+            player = null
+            binding.timer.text = currentItem!!.audioLength.toString()
+        }
     }
 
 

@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 // canvas code https://stackoverflow.com/questions/16650419/draw-in-canvas-by-finger-android
 class MainActivity : AppCompatActivity() {
 

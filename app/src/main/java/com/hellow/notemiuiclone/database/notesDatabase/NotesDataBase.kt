@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.hellow.notemiuiclone.models.noteModels.NoteConverter
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
 
-@Database(entities = [NoteItem::class], version = 1, exportSchema = false)
+@Database(entities = [NoteItem::class], version = 2, exportSchema = false)
 @TypeConverters(NoteConverter::class)
 abstract class NotesDataBase : RoomDatabase() {
 

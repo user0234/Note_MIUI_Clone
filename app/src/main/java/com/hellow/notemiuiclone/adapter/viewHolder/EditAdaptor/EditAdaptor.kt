@@ -1,6 +1,7 @@
 package com.hellow.notemiuiclone.adapter.viewHolder.EditAdaptor
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -14,7 +15,7 @@ import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.ui.editActivity.CreatEditViewModel
 
-class EditAdaptor(private val themeItem: ThemeItem, val callback: Callback) :
+class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var pendingFocusChange: CreatEditViewModel.FocusChange? = null
@@ -118,6 +119,16 @@ class EditAdaptor(private val themeItem: ThemeItem, val callback: Callback) :
         }
     }
 
+    fun changeTextSize(changeSizeType:CreatEditViewModel.ChangeSizeEventData){
+        val rcv = recyclerView ?: return
+        val viewHolder = rcv.findViewHolderForAdapterPosition(changeSizeType.pos)
+        if (viewHolder is EditFocusableViewHolder) {
+            viewHolder.changeSize(changeSizeType.change)
+        } else {
+            return
+        }
+    }
+
     fun setDescriptionToView(descItem: CreatEditViewModel.DescriptionTextView) {
         val rcv = recyclerView ?: return
         val viewHolder = rcv.findViewHolderForAdapterPosition(descItem.id)
@@ -170,7 +181,9 @@ class EditAdaptor(private val themeItem: ThemeItem, val callback: Callback) :
 
         fun itemDeleted(pos: Int, text: String)
 
-        fun focusLose(pos: Int, text: String)
+        fun focusLose(pos: Int, text: String,textSize:Float)
+
+        fun changeTextSize(textSize: Float)
 
         fun focusGain(pos: Int)
 

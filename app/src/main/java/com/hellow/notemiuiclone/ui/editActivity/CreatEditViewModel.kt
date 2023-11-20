@@ -84,20 +84,21 @@ class CreatEditViewModel(
 
     var focusPosition: Int = -1;
     var focusLastPositionForImage: Int = -1
-    var imageButtonVisible:Int = -1
+    var imageButtonVisible: Int = -1
 
     override fun imageItemFocused(pos: Int) {
         hideImageButtons(pos)
     }
 
-    private fun hideImageButtons(pos:Int){
-        imageButtonVisible = if(imageButtonVisible!=pos && imageButtonVisible!= -1 &&listItems[pos].type == NoteSubItemType.Image){
-            // send an event to hide that in list and set new imageButtonVisible
-            triggerHideImageButton(imageButtonVisible)
-            pos
-        }else{
-            pos
-        }
+    private fun hideImageButtons(pos: Int) {
+        imageButtonVisible =
+            if (imageButtonVisible != pos && imageButtonVisible != -1 && listItems[pos].type == NoteSubItemType.Image) {
+                // send an event to hide that in list and set new imageButtonVisible
+                triggerHideImageButton(imageButtonVisible)
+                pos
+            } else {
+                pos
+            }
     }
 
 
@@ -139,6 +140,29 @@ class CreatEditViewModel(
     }
 
 
+    /***
+     * change the size of current text value
+     */
+
+    data class ChangeSizeEventData(val change: Boolean, val pos: Int)
+
+    private val _changeTextSizeEvent = MutableLiveData<Event<ChangeSizeEventData>>()
+    val changeTextSizeEvent: LiveData<Event<ChangeSizeEventData>>
+        get() = _changeTextSizeEvent
+
+
+    override fun changeTextSize(textSize: Float) {
+        listItems[focusPosition].textSize = textSize
+    }
+
+    fun increaseTextSize() {
+        _changeTextSizeEvent.send(ChangeSizeEventData(true, focusPosition))
+    }
+
+    fun decreaseTextSize() {
+        _changeTextSizeEvent.send(ChangeSizeEventData(false, focusPosition))
+    }
+
     private fun focusItemAt(pos: Int, textPos: Int, itemExists: Boolean) {
         _focusEvent.send(FocusChange(pos, textPos, itemExists))
     }
@@ -165,13 +189,19 @@ class CreatEditViewModel(
         currentNote.description = listItems
         currentNote.descriptionText = descriptionTextValue
         currentNote.themeId = themeValue
+
+        if (currentNote.title.isBlank() || currentNote.descriptionText.isBlank()) {
+            viewModelScope.launch {
+                repository.deleteNote(currentNote)
+            }
+        }
         viewModelScope.launch {
             repository.updateNote(currentNote)
         }
 
     }
 
-    fun returnAllImageUri():ArrayList<Uri>?{
+    fun returnAllImageUri(): ArrayList<Uri>? {
         val uriList: ArrayList<Uri> = ArrayList()
 
         for (i in listItems) {
@@ -180,16 +210,16 @@ class CreatEditViewModel(
             }
         }
 
-        return if(uriList.isEmpty()){
+        return if (uriList.isEmpty()) {
             null
-        }else{
+        } else {
             uriList
         }
     }
 
-    fun returnAllText():String {
+    fun returnAllText(): String {
 
-        var textValue:String = ""
+        var textValue: String = ""
         textValue = title.value ?: ""
         for (i in listItems) {
             if (i.textValue.isNotBlank()) {
@@ -261,11 +291,10 @@ class CreatEditViewModel(
         updateListItems()
     }
 
-
-    override fun focusLose(pos: Int, text: String) {
+    override fun focusLose(pos: Int, text: String, textSize: Float) {
         // focus lost
         Log.i("Focus Changed", "Focus lost - $pos")
-        // listItems[pos].textValue = text
+
         updateListItems()
 
         focusPosition = -1
@@ -277,15 +306,14 @@ class CreatEditViewModel(
         // set the is focused in activity ui
         focusPosition = pos
         _focusGainEvent.value = true
-         if(imageButtonVisible!=-1){
-             triggerHideImageButton(imageButtonVisible)
-             imageButtonVisible = -1
-         }
-
+        if (imageButtonVisible != -1) {
+            triggerHideImageButton(imageButtonVisible)
+            imageButtonVisible = -1
+        }
     }
 
-    fun triggerHideImageButton(pos:Int){
-        LoggingClass.logTagI("imageHideTag","imageHide triggered")
+    fun triggerHideImageButton(pos: Int) {
+        LoggingClass.logTagI("imageHideTag", "imageHide triggered")
         _hideImageButtonEvent.send(HideImageButton(pos))
     }
 
@@ -345,7 +373,16 @@ class CreatEditViewModel(
 
         LoggingClass.logI("pos$position , name$name")
         val imageItem =
-            NoteSubItem(position, NoteSubItemType.Image, false, "", fileUri.toString(), "", name)
+            NoteSubItem(
+                position,
+                NoteSubItemType.Image,
+                false,
+                "",
+                18F,
+                fileUri.toString(),
+                "",
+                name
+            )
         listItems.add(position, imageItem)  // added item at the position
         updateListItems()
     }
