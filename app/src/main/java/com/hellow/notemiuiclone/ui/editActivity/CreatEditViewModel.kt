@@ -194,7 +194,7 @@ class CreatEditViewModel(
         currentNote.descriptionText = descriptionTextValue
         currentNote.themeId = themeValue
 
-        if (currentNote.title.isBlank() || currentNote.descriptionText.isBlank()) {
+        if ((currentNote.title.isBlank()) && (currentNote.description.size==1)&&(currentNote.description[0].textValue.isBlank())) {
             viewModelScope.launch {
                 repository.deleteNote(currentNote)
             }

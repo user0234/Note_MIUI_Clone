@@ -2,7 +2,6 @@ package com.hellow.notemiuiclone.ui.editActivity
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -13,9 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -37,7 +34,9 @@ import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.utils.ConstantValues
 import com.hellow.notemiuiclone.utils.LoggingClass
+import com.hellow.notemiuiclone.utils.TakePictureWithUriReturnContract
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
+import com.hellow.notemiuiclone.utils.Utils.getName
 import com.hellow.notemiuiclone.utils.hideKeyboard
 import com.hellow.notemiuiclone.utils.observeEvent
 import com.vmadalin.easypermissions.EasyPermissions
@@ -61,12 +60,30 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     private var noteItemReceived: NoteItem? = null
     private var isFocused = false
     private lateinit var themeAdapter: ThemeAdaptor
-    private lateinit var takePhoto: ActivityResultLauncher<Void?>
+    private var imageTaken = false
+    private val takeImageResult = registerForActivityResult(TakePictureWithUriReturnContract()) { (isSuccess, imageUri) ->
+        if (isSuccess) {
+            /***
+             * we get the uri value
+             */
+            val filename = imageUri.getName(this)
+            addImageToList(filename?:"noNameError",imageUri)
+         }
+    }
+
+    private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let { /***
+         * we get the uri value
+         */
+            addImageToNote(uri)
+        }
+    }
     private lateinit var recorder: AndroidAudioRecorder
     private var isRecording: Boolean = false
     private var currentRecordingItem: NoteSubItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         // set up view Binding
         viewBinding = ActivityCreatEditBinding.inflate(layoutInflater)
@@ -91,18 +108,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         } else {
             // kill the activity if note item not found
             finish()
-        }
-        // setUpCurrentItemsInView
-        takePhoto = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-            if (it != null) {
-                val photoId = UUID.randomUUID().toString()
-                val isSavedSuccessfully = savePhotoToInternalStorage(photoId, it)
-                if (isSavedSuccessfully) {
-                    addSavedImageToList(photoId)
-                } else {
-                    Toast.makeText(this, "Failed to save photo", Toast.LENGTH_SHORT).show()
-                }
-            }
         }
 
         setUpViewModel()
@@ -253,21 +258,6 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
     private fun getFileName() = UUID.randomUUID().toString()
 
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        when (requestCode) {
-            PERMISSION_AUDIO_REQUEST_CODE -> {
-                SettingsDialog.Builder(this).build().show()
-            }
-
-            PERMISSION_IMAGE_REQUEST_CODE -> {
-
-            }
-        }
-    }
-
-    private fun hasMicPermission() =
-        EasyPermissions.hasPermissions(applicationContext, Manifest.permission.RECORD_AUDIO)
-
     private fun audioPermissionAreAvailable() {
         isRecording = if (isRecording) {
             // Stop recording
@@ -329,21 +319,9 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
 
-    private fun getSavedImageUri(name: String): Uri? {
-        var fileUri: Uri? = null
-        val files = filesDir.listFiles()
-
-        files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") && it.nameWithoutExtension == name }
-            ?.map {
-
-                fileUri = FileProvider.getUriForFile(
-                    Objects.requireNonNull(applicationContext),
-                    BuildConfig.APPLICATION_ID + ".provider", it
-                )
-            }
-
-        return fileUri
-    }
+    /***
+     * Image taken using camera
+     */
 
     private fun deletePhotoFromInternalStorage(deleteItem: CreatEditViewModel.DeleteImageItem): Boolean {
         return try {
@@ -354,7 +332,19 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         }
     }
 
-    private fun addSavedImageToList(photoId: String) {
+    private fun startCameraToGetImage() {
+        // if this fails then we will use the database to store image separately
+        takeImageNewWay()
+    }
+
+    private fun takeImageNewWay(){
+        val filename = getFileName()
+        val fileUri = getNewFileUri(filename)
+        takeImageResult.launch(fileUri)
+    }
+
+
+    private fun addImageToList(photoId: String,imageUri:Uri) {
         onMenuDoneButtonClicked() // remove focus
 
         val focusPosition: Int =
@@ -371,35 +361,41 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             // something went wrong and we cant get the last focus position somehow
             return
         }
-        val fileUri = getSavedImageUri(photoId)
-        if (fileUri != null) {
-            viewModel.addNewImageItemToList(photoId, fileUri, focusPosition)
-        }
-
+            viewModel.addNewImageItemToList(photoId, imageUri, focusPosition)
 
     }
 
-    private fun startCameraToGetImage() {
-        // if this fails then we will use the database to store image separately
-        takePhoto.launch()
+    private fun getNewFileUri(fileName:String):Uri {
+        val tmpFile = File(getExternalFilesDir("/")!!,"$fileName.png")
+        return FileProvider.getUriForFile(applicationContext, "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
     }
 
-    private fun savePhotoToInternalStorage(filename: String, bmp: Bitmap): Boolean {
-        return try {
-            openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream ->
-                if (!bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
-                    throw IOException("Couldn't save bitmap.")
-                }
-            }
-            true
-        } catch (e: IOException) {
-            e.printStackTrace()
-            false
-        }
-    }
 
     private fun startGalleryToGetImage() {
+        selectImageFromGalleryResult.launch("image/*")
+    }
 
+    private fun addImageToNote(uri:Uri){
+        val filename = getFileName()
+        val fileUri = getNewFileUri(filename)
+        copyFile(uri,fileUri)
+        addImageToList(filename,fileUri)
+    }
+
+    @Throws(IOException::class)
+    private fun copyFile(pathFrom: Uri, pathTo: Uri) {
+        contentResolver.openInputStream(pathFrom).use { `in` ->
+            if (`in` == null) return
+            contentResolver.openOutputStream(pathTo).use { out ->
+                if (out == null) return
+                // Transfer bytes from in to out
+                val buf = ByteArray(1024)
+                var len: Int
+                while (`in`.read(buf).also { len = it } > 0) {
+                    out.write(buf, 0, len)
+                }
+            }
+        }
     }
 
     private fun setUpTitleData() {
@@ -654,6 +650,20 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             PERMISSION_AUDIO_REQUEST_CODE, Manifest.permission.RECORD_AUDIO
         )
     }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        when (requestCode) {
+            PERMISSION_AUDIO_REQUEST_CODE -> {
+                SettingsDialog.Builder(this).build().show()
+            }
+
+            PERMISSION_IMAGE_REQUEST_CODE -> {
+
+            }
+        }
+    }
+    private fun hasMicPermission() =
+        EasyPermissions.hasPermissions(applicationContext, Manifest.permission.RECORD_AUDIO)
 
     override fun onStop() {
         viewModel.updateNote()

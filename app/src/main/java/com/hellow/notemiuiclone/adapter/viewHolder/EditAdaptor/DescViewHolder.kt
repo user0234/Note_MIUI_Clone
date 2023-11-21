@@ -42,7 +42,8 @@ sealed interface EditAudioViewHolder {
 class CheckBoxItemViewHolder(
     binding: EditDescriptionCheckboxItemBinding,
     val callback: EditAdaptor.Callback,
-) : RecyclerView.ViewHolder(binding.root), EditFocusableViewHolder {
+) : RecyclerView.ViewHolder(binding.root), EditFocusableViewHolder
+{
 
     private val editText = binding.etText
     private val checkBox = binding.checkBox
@@ -229,7 +230,13 @@ class EditDescriptionImageItemViewHolder(
         binding.imageView.setOnClickListener {
             LoggingClass.logTagI("focusImage", "focus set on image")
             binding.buttonsView.visibility = View.VISIBLE
-            binding.imageView.strokeWidth = 5f
+            val res: Resources = binding.root.context.resources
+            val strokeWidth =
+                TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    10f, res.displayMetrics
+                ).toFloat()
+            binding.imageView.strokeWidth = strokeWidth
             callback.imageItemFocused(itemValue!!.id)
         }
 
@@ -266,7 +273,7 @@ class EditDescriptionImageItemViewHolder(
             binding.imageView.strokeWidth = 0f
 
             // TODO shrink the size with animation
-
+ /*
             if (isShrunk) {
                 binding.imageView.animate()
                     .translationX(0f)
@@ -319,8 +326,7 @@ class EditDescriptionImageItemViewHolder(
 
                 binding.btResize.setImageResource(R.drawable.edit_description_image_expand_item)
             }
-            // make the size small with animations and make the check as small when started
-            // TODO put the image at the end of the view
+  */
 
         }
 
@@ -342,13 +348,15 @@ class EditDescriptionImageItemViewHolder(
 
         Log.i("list_image_item", "name:${itemValue?.imageFileName}   uri:${itemValue?.imageUri}  ")
 
+
+        // TODO add so we can have better height of the image
+
         Glide
             .with(image)
             .load(Uri.parse(item.imageUri))
             .fitCenter()
             .placeholder(R.drawable.image_place_holder)
             .into(image)
-
     }
 
     override fun addDescription(value: String) {

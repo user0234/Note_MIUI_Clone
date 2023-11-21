@@ -2,25 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="430dp"
     android:layout_marginTop="13dp"
     android:layout_marginBottom="20dp"
+    android:id="@+id/mainConstrainLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundedImageViewCorners"
         app:srcCompat="@drawable/ic_launcher_background"
         app:strokeColor="@color/mainYellowColor"
-        app:strokeWidth="0dp"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="7dp"
-        app:shapeAppearanceOverlay="@style/roundedImageViewCorners"
-        />
+        app:strokeWidth="0dp" />
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/buttons_view"
         android:visibility="gone"
