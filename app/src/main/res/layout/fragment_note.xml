@@ -1,47 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/transparent"
     tools:context=".ui.fragment.NoteFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/transparent"
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:fitsSystemWindows="true">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:background="@color/transparent"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:overScrollMode="never"
+            app:title=" "
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:background="@color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.google.android.material.search.SearchBar
+                    android:id="@+id/search_bar"
+                    android:background="@color/transparent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_note_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/transparent"
         android:layout_gravity="top|center_horizontal"
-        tools:listitem="@layout/notes_list_item"
+        android:layout_marginHorizontal="5dp"
+        android:background="@color/transparent"
         android:visibility="visible"
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/notes_list_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/empty_list_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
+
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/empty_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/emptyListIconBackGround"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/empty_image_view"
-            android:backgroundTint="@color/emptyListIconBackGround"
-            app:strokeWidth="0dp"
-            >
+            app:strokeWidth="0dp">
+
             <ImageView
-                android:layout_margin="10dp"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/notes_list_empty_icon"
-                />
+                android:layout_margin="10dp"
+                android:src="@drawable/notes_list_empty_icon" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -49,18 +87,35 @@
             android:id="@+id/empty_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Task Created"
-            android:textSize="19sp"
             android:layout_marginTop="20dp"
+            android:text="No Task Created"
             android:textColor="@color/emptyListTextColor"
-            app:layout_constraintTop_toBottomOf="@+id/empty_image_view"
+            android:textSize="19sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/empty_image_view"
 
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.search.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="Search tab"
+        app:layout_anchor="@id/search_bar">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginHorizontal="5dp"
+            android:background="@color/transparent"
+            android:visibility="visible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/notes_list_item" />
+
+    </com.google.android.material.search.SearchView>
 
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
