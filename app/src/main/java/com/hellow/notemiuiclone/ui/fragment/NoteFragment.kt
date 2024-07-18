@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
+import com.hellow.notemiuiclone.databinding.FragmentNoteBinding
 import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
@@ -18,13 +19,17 @@ import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
 
 class NoteFragment : Fragment(R.layout.fragment_note) {
 
+    private lateinit var binding: FragmentNoteBinding
+
     private lateinit var viewModel: MainActivityViewModel
     lateinit var notesAdapter: NotesAdapter
-    lateinit var rvNotes: RecyclerView
-    lateinit var rvEmptyView: ConstraintLayout
+    private lateinit var notesAdapter1: NotesAdapter
+    private lateinit var rvNotes: RecyclerView
+    private lateinit var rvEmptyView: ConstraintLayout
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentNoteBinding.bind(view)
 
         viewModel = (activity as MainActivity).viewModel
         rvNotes = view.findViewById(R.id.rv_note_list)
@@ -38,24 +43,21 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
             startActivity(intent)
         }
 
-        viewModel.getNotes().observe(activity as MainActivity)
+        viewModel.getNotes().observe(viewLifecycleOwner)
         {
-            if (it == null) {
+            if (it.isNullOrEmpty()) {
                 rvNotes.visibility = View.GONE
                 rvEmptyView.visibility = View.VISIBLE
             } else {
-                if (it.isEmpty()) {
-                    rvNotes.visibility = View.GONE
-                    rvEmptyView.visibility = View.VISIBLE
-                } else {
-                    // TODO sort it by most recent changed
-                    it.sortedBy { item ->
-                        item.recentChangeDate
-                    }
-                    notesAdapter.notesDiffer.submitList(it)
-                    rvNotes.visibility = View.VISIBLE
-                    rvEmptyView.visibility = View.GONE
+                it.sortedBy { item ->
+                    item.recentChangeDate
                 }
+
+                notesAdapter1.notesDiffer.submitList(it.subList(0, 2))
+
+                notesAdapter.notesDiffer.submitList(it)
+                rvNotes.visibility = View.VISIBLE
+                rvEmptyView.visibility = View.GONE
             }
         }
 
@@ -110,6 +112,12 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         rvNotes.adapter = notesAdapter
         rvNotes.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         rvNotes.setHasFixedSize(false)
+
+        notesAdapter1 = NotesAdapter()
+        binding.rvSearchResult.adapter = notesAdapter1
+        binding.rvSearchResult.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding.rvSearchResult.setHasFixedSize(false)
     }
 
 }

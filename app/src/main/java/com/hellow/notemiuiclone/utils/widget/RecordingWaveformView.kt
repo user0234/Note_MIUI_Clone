@@ -215,7 +215,7 @@ class RecordingWaveformView @JvmOverloads constructor(
     private fun drawRecordingWaveform(canvas: Canvas) {
         if (recordingData.isNotEmpty()) {
             clearDrawLines()
-            val half = viewHeightPx / 2
+            val halfHeight = viewHeightPx / 2
             val halfWidth = viewWidthPx / 2
             val endPx = if (durationPx < halfWidth) {
                 durationPx.toInt()
@@ -232,10 +232,10 @@ class RecordingWaveformView @JvmOverloads constructor(
                 if (xPos >= 0 && xPos <= viewWidthPx && step + 3 < drawLinesArray.size) {  // Draw only visible part of waveform
                     drawLinesArray[step] = xPos
                     drawLinesArray[step + 1] =
-                        (half + recordingData[recordingData.size - 1 - sampleIndex] + 1).toFloat()
+                        (halfHeight + recordingData[recordingData.size - 1 - sampleIndex] + 1).toFloat()
                     drawLinesArray[step + 2] = xPos
                     drawLinesArray[step + 3] =
-                        (half - recordingData[recordingData.size - 1 - sampleIndex] - 1).toFloat()
+                        (halfHeight - recordingData[recordingData.size - 1 - sampleIndex] - 1).toFloat()
                     step += 4
                 }
             }

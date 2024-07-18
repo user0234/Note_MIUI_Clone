@@ -1,5 +1,6 @@
 package com.hellow.notemiuiclone.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -47,6 +48,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
         return reminderDiffer.currentList.size
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
 
         val currentItem = reminderDiffer.currentList[position]
@@ -95,8 +97,9 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
             holder.binding.llCountBox.visibility = View.GONE
         } else {
             holder.binding.llCountBox.visibility = View.VISIBLE
-            holder.binding.itemCount.text =
-                "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+            val count = "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+            holder.binding.itemCount.text = count
+
 
             val adaptor = ReminderSubItemAdaptor()
             holder.binding.rvReminderList.adapter = adaptor
@@ -117,7 +120,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
                 if (isChecked) {
 
-                    currentItem.checkedCount = currentItem.checkedCount + 1
+                    currentItem.checkedCount += 1
                     if (currentItem.checkedCount == currentItem.itemsList.size) {
                         currentItem.reminderStatus = ReminderStatus.DoneWhole
                         currentItem.isExpended = false
@@ -136,7 +139,7 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
 
                     if (currentItem.checkedCount == currentItem.itemsList.size) {
 
-                        currentItem.checkedCount = currentItem.checkedCount - 1
+                        currentItem.checkedCount -= 1
                         currentItem.reminderStatus = ReminderStatus.NotDone
                         currentItem.itemsList[subListPosition].isDone = false
 
@@ -152,8 +155,10 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
                         it(currentItem, true)
                     }
                 }
-                holder.binding.itemCount.text =
-                    "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+
+                val count = "${currentItem.checkedCount}/${currentItem.itemsList.size}"
+                holder.binding.itemCount.text = count
+
 
                 adaptor.reminderSubItemDiffer.submitList(currentItem.itemsList)
             }
@@ -220,38 +225,35 @@ class ReminderAdaptor : RecyclerView.Adapter<ReminderAdaptor.ReminderViewHolder>
             }
         }
 
-        holder.itemView.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
+        holder.itemView.setOnTouchListener { v, event ->
+            when (event?.action) {
 
-                    MotionEvent.ACTION_DOWN -> {
-                        holder.itemView.animate()
-                            .scaleY(0.83F)
-                            .scaleX(0.83F)
-                            .setDuration(80)
-                            .start()
-                    }
-
-                    MotionEvent.ACTION_UP -> {
-                        holder.itemView.animate()
-                            .scaleX(1F)
-                            .scaleY(1F)
-                            .setDuration(80)
-                            .start()
-                    }
-
-                    MotionEvent.ACTION_CANCEL -> {
-                        holder.itemView.animate()
-                            .scaleX(1F)
-                            .scaleY(1F)
-                            .setDuration(80)
-                            .start()
-                    }
+                MotionEvent.ACTION_DOWN -> {
+                    holder.itemView.animate()
+                        .scaleY(0.83F)
+                        .scaleX(0.83F)
+                        .setDuration(80)
+                        .start()
                 }
-                return v?.onTouchEvent(event) ?: true
-            }
 
-        })
+                MotionEvent.ACTION_UP -> {
+                    holder.itemView.animate()
+                        .scaleX(1F)
+                        .scaleY(1F)
+                        .setDuration(80)
+                        .start()
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    holder.itemView.animate()
+                        .scaleX(1F)
+                        .scaleY(1F)
+                        .setDuration(80)
+                        .start()
+                }
+            }
+            v?.onTouchEvent(event) ?: true
+        }
 
 
     }

@@ -9,8 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NoteTabAdaptor
-import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
-import com.hellow.notemiuiclone.database.reminderDatabase.ReminderDatabase
+import com.hellow.notemiuiclone.database.AppDataBase
 import com.hellow.notemiuiclone.databinding.ActivityMainBinding
 import com.hellow.notemiuiclone.dialogs.CreateReminderDialog
 import com.hellow.notemiuiclone.models.ReminderItem
@@ -35,9 +34,11 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        val notesRepository = NotesRepository(NotesDataBase(this)!!)
+        val appDataBase = AppDataBase(this)!!
 
-        val reminderRepository = ReminderRepository(ReminderDatabase(this)!!)
+        val notesRepository = NotesRepository(appDataBase)
+
+        val reminderRepository = ReminderRepository(appDataBase)
 
         val viewModelProviderFactory =
             MainViewModelProviderFactory(application, notesRepository, reminderRepository)

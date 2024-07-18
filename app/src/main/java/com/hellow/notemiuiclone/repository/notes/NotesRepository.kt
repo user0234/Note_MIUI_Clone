@@ -1,12 +1,12 @@
 package com.hellow.notemiuiclone.repository.notes
 
-import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
+import com.hellow.notemiuiclone.database.AppDataBase
 import com.hellow.notemiuiclone.models.noteModels.NoteItem
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.utils.ConstantValues
 
 class NotesRepository(
-    private val dataBase: NotesDataBase
+    private val dataBase: AppDataBase
 ) : RepositoryNotesBluePrint {
 
     override suspend fun createNote(note: NoteItem) = dataBase.notesDao().insert(note)

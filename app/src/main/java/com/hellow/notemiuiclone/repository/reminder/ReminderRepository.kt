@@ -1,12 +1,12 @@
 package com.hellow.notemiuiclone.repository.reminder
 
 import androidx.lifecycle.LiveData
-import com.hellow.notemiuiclone.database.reminderDatabase.ReminderDatabase
+import com.hellow.notemiuiclone.database.AppDataBase
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.ReminderStatus
 
 class ReminderRepository(
-    private val database: ReminderDatabase
+    private val database: AppDataBase
 ) :RepositoryReminderBluePrint {
     override suspend fun addReminder(reminder: ReminderItem) {
         database.reminderDao().addReminder(reminder)

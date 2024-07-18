@@ -1,4 +1,4 @@
-package com.hellow.notemiuiclone.database.notesDatabase
+package com.hellow.notemiuiclone.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
