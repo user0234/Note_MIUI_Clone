@@ -1,5 +1,5 @@
-# Note_MIUI_Clone
-A  Clone of Miui Notes app 
+# Notes Taking and checklist app
+A note taking application
 
 Features 
 - Uses Room database
