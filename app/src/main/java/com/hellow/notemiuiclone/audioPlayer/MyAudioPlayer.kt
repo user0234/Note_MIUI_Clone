@@ -36,6 +36,8 @@ class MyAudioPlayer(private val context:Context): AudioPlayer {
     override fun stop() {
          player?.stop()
         player?.release()
+        amplitudeTimer.cancel()
+        amplitudeTimer.purge()
         player = null
     }
 

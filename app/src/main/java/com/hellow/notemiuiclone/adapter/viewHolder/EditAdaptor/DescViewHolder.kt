@@ -4,7 +4,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
@@ -17,7 +16,7 @@ import com.hellow.notemiuiclone.audioPlayer.MyAudioPlayer
 import com.hellow.notemiuiclone.databinding.EditDescriptionAudioItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionCheckboxItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionImageItemBinding
-import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.utils.LoggingClass
@@ -42,12 +41,11 @@ sealed interface EditAudioViewHolder {
 class CheckBoxItemViewHolder(
     binding: EditDescriptionCheckboxItemBinding,
     val callback: EditAdaptor.Callback,
-) : RecyclerView.ViewHolder(binding.root), EditFocusableViewHolder
-{
+) : RecyclerView.ViewHolder(binding.root), EditFocusableViewHolder {
 
     private val editText = binding.etText
     private val checkBox = binding.checkBox
-    private var itemValue: NoteSubItem? = null
+    private var itemValue: NoteSubDataItem? = null
     private var isBoldChecked: Boolean = true
     private var currentText: String = ""
     private var currentSize: Float? = null
@@ -109,13 +107,13 @@ class CheckBoxItemViewHolder(
                     editText.setSelection(textCurrent.length)
                     val pos = bindingAdapterPosition
                     if (pos != RecyclerView.NO_POSITION) {
-                        callback.newItemAdded(pos, textCurrent, textNext)
+                        callback.newItemAdded(pos, textCurrent, textNext,itemValue)
                     }
                 }
             }
 
         })
-        editText.setOnKeyListener { _, keyCode, keyEvent ->
+        editText.setOnKeyListener { _, keyCode, _ ->
             val isCursorAtStart =
                 editText.selectionStart == 0 && editText.selectionStart == editText.selectionEnd
 
@@ -138,7 +136,7 @@ class CheckBoxItemViewHolder(
         }
     }
 
-    fun bind(item: NoteSubItem, themeItem: ThemeItem) {
+    fun bind(item: NoteSubDataItem, themeItem: ThemeItem) {
         itemValue = item
         currentSize = item.textSize
         editText.textSize = item.textSize
@@ -156,12 +154,12 @@ class CheckBoxItemViewHolder(
         editText.setTextColor(Color.parseColor(themeItem.editTextColor))
         editText.setHintTextColor(Color.parseColor(themeItem.hintTextColor))
 
-        if(item.id==0){
+        if (item.id == 0) {
             /***
              * set the hint text for first position
              */
             editText.hint = "Start Typing ..."
-        }else{
+        } else {
             /***
              * hide the hint for other position
              */
@@ -179,8 +177,11 @@ class CheckBoxItemViewHolder(
     override fun showCheckBox() {
         if (checkBox.visibility == View.GONE) {
             checkBox.visibility = View.VISIBLE
+            itemValue?.type = NoteSubItemType.CheckBox
         } else {
             checkBox.visibility = View.GONE
+            itemValue?.type = NoteSubItemType.String
+
         }
     }
 
@@ -221,8 +222,7 @@ class EditDescriptionImageItemViewHolder(
 
     private val descriptionText = binding.descriptionText
     private val image = binding.imageView
-    private var itemValue: NoteSubItem? = null
-    private var isShrunk: Boolean = false
+    private var itemValue: NoteSubDataItem? = null
     private var buttonList = binding.buttonsView
 
     init {
@@ -272,62 +272,29 @@ class EditDescriptionImageItemViewHolder(
             binding.buttonsView.visibility = View.GONE
             binding.imageView.strokeWidth = 0f
 
-            // TODO shrink the size with animation
- /*
-            if (isShrunk) {
-                binding.imageView.animate()
-                    .translationX(0f)
-                    .translationY(0f)
-                    .withStartAction {
-                        val res: Resources = binding.root.context.resources
-                        val height =
-                            TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP,
-                                200f, res.displayMetrics
-                            ).toInt()
-                        binding.root.layoutParams.height = height;
-                    }
-                    .withEndAction {
-                        binding.imageView.animate()
-                            .scaleY(1F)
-                            .scaleX(1F)
 
-                            .setDuration(100)
-                            .start()
+            if (binding.imageResizeLayout.visibility == View.VISIBLE) {
+                binding.imageResizeLayout.animate()
+                    .scaleX(0f)
+                    .scaleY(0f)
+
+                    .withEndAction {
+                        binding.imageResizeLayout.visibility = View.GONE
                     }
-                    .setDuration(100)
+                    .setDuration(300)
                     .start()
-                isShrunk = false
-                binding.btResize.setImageResource(R.drawable.edit_description_image_compress_item)
+
             } else {
                 binding.imageView.animate()
-                    .scaleY(0.5F)
-                    .scaleX(0.5F)
-                    .withEndAction {
-                        binding.imageView.animate()
-                            .translationX(-210f)
-                            .translationY(-150f)
-                            .withEndAction {
-                                val res: Resources = binding.root.context.resources
-                                val height =
-                                    TypedValue.applyDimension(
-                                        TypedValue.COMPLEX_UNIT_DIP,
-                                        100f, res.displayMetrics
-                                    ).toInt()
-                                binding.root.layoutParams.height = height
-                            }
-                            .setDuration(100)
-                            .start()
+                    .scaleY(1F)
+                    .scaleX(1F)
+                    .withStartAction {
+                        binding.imageResizeLayout.visibility = View.VISIBLE
                     }
-                    .setDuration(100)
+                    .setDuration(300)
                     .start()
 
-                isShrunk = true
-
-                binding.btResize.setImageResource(R.drawable.edit_description_image_expand_item)
             }
-  */
-
         }
 
         binding.btDelete.setOnClickListener {
@@ -338,7 +305,7 @@ class EditDescriptionImageItemViewHolder(
         }
     }
 
-    fun bind(item: NoteSubItem) {
+    fun bind(item: NoteSubDataItem) {
         itemValue = item
 
         if (item.imageDescription != null && item.imageDescription != "") {
@@ -383,9 +350,9 @@ class EditDescriptionAudioItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root), EditAudioViewHolder {
 
     private val timerText = binding.timer
-    var player: MyAudioPlayer? = null
-    var playing: Boolean = false
-    private var currentItem: NoteSubItem? = null
+    private var player: MyAudioPlayer? = null
+    private var playing: Boolean = false
+    private var currentItem: NoteSubDataItem? = null
 
     init {
         binding.btPlay.setOnClickListener {
@@ -398,14 +365,13 @@ class EditDescriptionAudioItemViewHolder(
                     playing = true
                     player!!.setonPlayerStop {
                         binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
-                        playing = false
                     }
                     player!!.setonPlayAmplitude { timer ->
 
                         if (timer != null) {
                             binding.timer.text = Utils.getTimer((timer / 1000))
                         } else {
-                            binding.timer.text = currentItem!!.audioLength.toString()
+                            binding.timer.text = Utils.getTimer((currentItem?.audioLength ?: 0)/1000)
                         }
                     }
                 } else {
@@ -413,7 +379,7 @@ class EditDescriptionAudioItemViewHolder(
                     binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
                     playing = false
                     player = null
-                    binding.timer.text = currentItem!!.audioLength.toString()
+                    binding.timer.text = Utils.getTimer((currentItem?.audioLength ?: 0)/1000)
                 }
             }
 
@@ -425,9 +391,9 @@ class EditDescriptionAudioItemViewHolder(
 
     }
 
-    fun bind(item: NoteSubItem) {
+    fun bind(item: NoteSubDataItem) {
         currentItem = item
-        timerText.text = (item.audioLength!! / 1000).toString()
+        timerText.text = Utils.getTimer((currentItem?.audioLength ?: 0)/1000)
     }
 
     override fun stopPlaying() {
@@ -436,7 +402,7 @@ class EditDescriptionAudioItemViewHolder(
             binding.btPlay.setImageResource(R.drawable.audio_item_play_button)
             playing = false
             player = null
-            binding.timer.text = currentItem!!.audioLength.toString()
+            binding.timer.text = Utils.getTimer((currentItem?.audioLength ?: 0)/1000)
         }
     }
 

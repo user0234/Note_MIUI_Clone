@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.EditDescriptionAudioItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionCheckboxItemBinding
 import com.hellow.notemiuiclone.databinding.EditDescriptionImageItemBinding
-import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.ui.editActivity.CreatEditViewModel
@@ -38,12 +38,12 @@ class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
         this.recyclerView = null
     }
 
-    private val differCallBack = object : DiffUtil.ItemCallback<NoteSubItem>() {
-        override fun areItemsTheSame(oldItem: NoteSubItem, newItem: NoteSubItem): Boolean {
+    private val differCallBack = object : DiffUtil.ItemCallback<NoteSubDataItem>() {
+        override fun areItemsTheSame(oldItem: NoteSubDataItem, newItem: NoteSubDataItem): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: NoteSubItem, newItem: NoteSubItem): Boolean {
+        override fun areContentsTheSame(oldItem: NoteSubDataItem, newItem: NoteSubDataItem): Boolean {
             return oldItem.type == newItem.type && oldItem.id == newItem.id && newItem.checkBox == oldItem.checkBox && newItem.textValue.length == oldItem.textValue.length && newItem.textValue == oldItem.textValue
         }
     }
@@ -85,7 +85,7 @@ class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val currentItem: NoteSubItem = differ.currentList[position]
+        val currentItem: NoteSubDataItem = differ.currentList[position]
         when (holder) {
             is CheckBoxItemViewHolder -> {
                 holder.bind(currentItem, noteItemTheme)
@@ -203,7 +203,12 @@ class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
 
     interface Callback {
 
-        fun newItemAdded(pos: Int, textCurrent: String, textNext: String)
+        fun newItemAdded(
+            pos: Int,
+            textCurrent: String,
+            textNext: String,
+            itemValue: NoteSubDataItem?
+        )
 
         fun itemDeleted(pos: Int, text: String)
 
@@ -221,9 +226,9 @@ class EditAdaptor(themeItem: ThemeItem, private val callback: Callback) :
 
         fun addDescriptionToImage(id: Int, currentText: String?)
 
-        fun deleteImageItem(item: NoteSubItem)
+        fun deleteImageItem(item: NoteSubDataItem)
 
-        fun deleteAudioItem(item: NoteSubItem?)
+        fun deleteAudioItem(item: NoteSubDataItem?)
 
         fun imageItemFocused(pos: Int)
 

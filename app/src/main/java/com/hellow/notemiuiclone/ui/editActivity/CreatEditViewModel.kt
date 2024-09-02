@@ -12,8 +12,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hellow.notemiuiclone.adapter.viewHolder.EditAdaptor.EditAdaptor
-import com.hellow.notemiuiclone.models.noteModels.NoteItem
-import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.models.noteModels.ThemeItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
@@ -21,10 +21,11 @@ import com.hellow.notemiuiclone.utils.Event
 import com.hellow.notemiuiclone.utils.LoggingClass
 import com.hellow.notemiuiclone.utils.send
 import kotlinx.coroutines.launch
+
 class CreatEditViewModel(
     val app: Application,
     private val repository: NotesRepository,
-    private val currentItem: NoteItem,
+    private val currentItem: NoteDataItem,
 ) : AndroidViewModel(app), EditAdaptor.Callback {
     companion object {
         const val TAG_FOCUS = "FocusTag"
@@ -47,16 +48,16 @@ class CreatEditViewModel(
     override fun checkChanged(pos: Int, isChecked: Boolean) {
         listItems[pos].checkBox = isChecked
         Log.i("Check Changed", "Current Check - ${isChecked}")
-        listItems[focusPosition].type = if(isChecked){
+        listItems[focusPosition].type = if (isChecked) {
             NoteSubItemType.CheckBox
-        }else {
+        } else {
             NoteSubItemType.String
         }
-            if (listItems[focusPosition].type == NoteSubItemType.String) {
-                NoteSubItemType.CheckBox
-            } else {
-                NoteSubItemType.String
-            }
+        if (listItems[focusPosition].type == NoteSubItemType.String) {
+            NoteSubItemType.CheckBox
+        } else {
+            NoteSubItemType.String
+        }
         updateListItems()
     }
 
@@ -67,7 +68,7 @@ class CreatEditViewModel(
 
     private val _editItems =
         MutableLiveData(currentItem.description.toMutableList())
-    val editItems: LiveData<out List<NoteSubItem>>
+    val editItems: LiveData<out List<NoteSubDataItem>>
         get() = _editItems
 
     private val _title =
@@ -118,9 +119,11 @@ class CreatEditViewModel(
             i++
         }
         _editItems.value = listItems.toMutableList()
+
+        updateNote()
     }
 
-    private val listItems: MutableList<NoteSubItem> = currentItem.description.toMutableList()
+    private val listItems: MutableList<NoteSubDataItem> = currentItem.description.toMutableList()
 
     fun getThemeItem(value: Int): ThemeItem {
 
@@ -194,7 +197,7 @@ class CreatEditViewModel(
         currentNote.descriptionText = descriptionTextValue
         currentNote.themeId = themeValue
 
-        if ((currentNote.title.isBlank()) && (currentNote.description.size==1)&&(currentNote.description[0].textValue.isBlank())) {
+        if ((currentNote.title.isBlank())) {
             viewModelScope.launch {
                 repository.deleteNote(currentNote)
             }
@@ -234,14 +237,25 @@ class CreatEditViewModel(
         return textValue
     }
 
-    override fun newItemAdded(pos: Int, textCurrent: String, textNext: String) {
+    override fun newItemAdded(
+        pos: Int,
+        textCurrent: String,
+        textNext: String,
+        itemValue: NoteSubDataItem?
+    ) {
 
-        val previousItemType = listItems[pos].type
-        val item = NoteSubItem(pos + 1, previousItemType, false, textNext)
+        val previousItemType = itemValue!!.type
+        val item = NoteSubDataItem(
+            pos + 1,
+            previousItemType,
+            itemValue.checkBox,
+            textNext,
+            itemValue.textSize
+        )
 
         Log.i(
             "Item Added",
-            "current text :${textCurrent} , next text:${textNext} , type = ${previousItemType}"
+            "current text :${textCurrent} , next text:${textNext} , type = $itemValue"
         )
 
         listItems[pos].textValue = textCurrent
@@ -269,7 +283,7 @@ class CreatEditViewModel(
             focusItemAt(pos - 1, focusLoc, true)
         } else {
             val focusLoc = listItems[pos - 1].textValue.length
-            Log.i("Item Delete","text at  %s")
+            Log.i("Item Delete", "text at  %s")
 
             val textValue = listItems[pos - 1].textValue + text
             listItems[pos - 1].textValue = textValue
@@ -289,7 +303,7 @@ class CreatEditViewModel(
         _focusGainEvent.value = false
     }
 
-    fun addNewAudioItem(audioItem: NoteSubItem) {
+    fun addNewAudioItem(audioItem: NoteSubDataItem) {
         LoggingClass.logI("pos${audioItem.id} , name${(audioItem.audioLength!! / 1000)} in second")
         listItems.add(audioItem.id, audioItem)  // added item at the position
         updateListItems()
@@ -368,12 +382,11 @@ class CreatEditViewModel(
         ContextCompat.startActivity(content, intent, null)
     }
 
-
     fun addNewImageItemToList(name: String, fileUri: Uri, position: Int) {
 
         LoggingClass.logI("pos$position , name$name")
         val imageItem =
-            NoteSubItem(
+            NoteSubDataItem(
                 position,
                 NoteSubItemType.Image,
                 false,
@@ -392,14 +405,14 @@ class CreatEditViewModel(
         triggerDescriptionDialog(descriptionItem)
     }
 
-    override fun deleteImageItem(item: NoteSubItem) {
+    override fun deleteImageItem(item: NoteSubDataItem) {
         listItems.removeAt(item.id)
         updateListItems()
         // delete the image from repository
         _deleteImageEvent.send(DeleteImageItem(item.imageFileName!!))
     }
 
-    override fun deleteAudioItem(item: NoteSubItem?) {
+    override fun deleteAudioItem(item: NoteSubDataItem?) {
         if (item != null) {
             listItems.removeAt(item.id)
             updateListItems()
@@ -411,7 +424,6 @@ class CreatEditViewModel(
             )
         }
     }
-
 
 
     private val _deleteImageEvent = MutableLiveData<Event<DeleteImageItem>>()

@@ -7,15 +7,22 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.models.converters.DataBaseConverters
-import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 
 
-@Database(entities = [ReminderItem::class, NoteItem::class], version = 1, exportSchema = false)
+@Database(
+    entities = [ReminderItem::class, NoteDataItem::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(DataBaseConverters::class)
-abstract class AppDataBase: RoomDatabase() {
+abstract class AppDataBase : RoomDatabase() {
 
     abstract fun reminderDao(): ReminderDao
     abstract fun notesDao(): NotesDao
+
+
     companion object {
 
         @Volatile
@@ -27,7 +34,8 @@ abstract class AppDataBase: RoomDatabase() {
             val INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 AppDataBase::class.java,
-                "app_database.db")
+                "app_database.db"
+            )
                 .addTypeConverter(DataBaseConverters())
                 .build()
             instance = INSTANCE

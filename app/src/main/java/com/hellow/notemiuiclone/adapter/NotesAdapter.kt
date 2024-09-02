@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hellow.notemiuiclone.databinding.NotesListItemBinding
-import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
 import com.hellow.notemiuiclone.utils.ConstantValues
 import com.hellow.notemiuiclone.utils.Utils
 import java.time.LocalDateTime
@@ -23,12 +23,12 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
 
     // for faster change in view
-    private val differCallBack = object : DiffUtil.ItemCallback<NoteItem>() {
-        override fun areItemsTheSame(oldItem: NoteItem, newItem: NoteItem): Boolean {
-            return oldItem.id == newItem.id
+    private val differCallBack = object : DiffUtil.ItemCallback<NoteDataItem>() {
+        override fun areItemsTheSame(oldItem: NoteDataItem, newItem: NoteDataItem): Boolean {
+            return oldItem.id == newItem.id && oldItem.recentChangeDate == newItem.recentChangeDate && oldItem.title == newItem.title
         }
 
-        override fun areContentsTheSame(oldItem: NoteItem, newItem: NoteItem): Boolean {
+        override fun areContentsTheSame(oldItem: NoteDataItem, newItem: NoteDataItem): Boolean {
             return oldItem == newItem && oldItem.recentChangeDate == newItem.recentChangeDate
         }
 
@@ -137,9 +137,9 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
         return notesDiffer.currentList.size
     }
 
-    private var onItemClickListener: ((NoteItem) -> Unit)? = null
+    private var onItemClickListener: ((NoteDataItem) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (NoteItem) -> Unit) {
+    fun setOnItemClickListener(listener: (NoteDataItem) -> Unit) {
         onItemClickListener = listener
     }
 

@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.hellow.notemiuiclone.models.ReminderStatus
 import com.hellow.notemiuiclone.models.ReminderSubItem
-import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 
 @ProvidedTypeConverter
     class DataBaseConverters {
@@ -34,15 +34,15 @@ import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
         }
 
         @TypeConverter
-        fun fromListNoteDescription(value: List<NoteSubItem>): String {
+        fun fromListNoteDescription(value: List<NoteSubDataItem>): String {
             return gson.toJson(value)
         }
 
         @TypeConverter
-        fun toListNoteDescription(value: String): List<NoteSubItem> {
+        fun toListNoteDescription(value: String): List<NoteSubDataItem> {
             return gson.fromJson(
                 value,
-                object : TypeToken<List<NoteSubItem>>() {
+                object : TypeToken<List<NoteSubDataItem>>() {
                 }.type
             )
         }

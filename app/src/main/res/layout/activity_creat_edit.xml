@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.editActivity.CreatEditActivity">
+    tools:context=".ui.editActivity.EditNoteActivity">
 
     <EditText
         android:id="@+id/remove_focus_text"
@@ -160,7 +160,8 @@
                         android:layout_weight="1"
                         android:backgroundTint="@android:color/transparent"
                         android:clickable="true"
-                        android:src="@drawable/baseline_format_bold_24" />
+                        android:src="@drawable/baseline_format_bold_24"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 

@@ -45,6 +45,10 @@
     <color name="imageDialogBackgroundColor">#FEFEFE</color>
     <color name="imageDialogCancelColor">#EEEEEE</color>
 
+<!--    search bar colors -->
+    <color name="searchBarBackground">#8FA2A6</color>
+
+
     // theme colors
 <!--    <color name="white">#FEFEFE</color>-->
 <!--    <color name="black">#222222</color>-->

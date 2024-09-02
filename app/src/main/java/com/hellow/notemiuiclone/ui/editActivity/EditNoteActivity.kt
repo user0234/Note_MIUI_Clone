@@ -24,14 +24,17 @@ import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.ThemeAdaptor
 import com.hellow.notemiuiclone.adapter.viewHolder.EditAdaptor.EditAdaptor
 import com.hellow.notemiuiclone.audioRecorder.AndroidAudioRecorder
-import com.hellow.notemiuiclone.database.notesDatabase.NotesDataBase
+import com.hellow.notemiuiclone.database.AppDataBase
 import com.hellow.notemiuiclone.databinding.ActivityCreatEditBinding
 import com.hellow.notemiuiclone.dialogs.AddImageDescriptionDialog
 import com.hellow.notemiuiclone.dialogs.ImageGetDialog
-import com.hellow.notemiuiclone.models.noteModels.NoteItem
-import com.hellow.notemiuiclone.models.noteModels.NoteSubItem
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
+import com.hellow.notemiuiclone.models.noteModels.NoteSubDataItem
 import com.hellow.notemiuiclone.models.noteModels.NoteSubItemType
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
+import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
+import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
+import com.hellow.notemiuiclone.ui.mainActivity.MainViewModelProviderFactory
 import com.hellow.notemiuiclone.utils.ConstantValues
 import com.hellow.notemiuiclone.utils.LoggingClass
 import com.hellow.notemiuiclone.utils.TakePictureWithUriReturnContract
@@ -43,11 +46,10 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.io.File
 import java.io.IOException
-import java.util.Objects
 import java.util.UUID
 
 
-class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class EditNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     companion object {
         const val PERMISSION_AUDIO_REQUEST_CODE = 10
@@ -55,64 +57,53 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     private lateinit var viewBinding: ActivityCreatEditBinding
-    private lateinit var viewModel: CreatEditViewModel
+
+    private val viewModel: CreatEditViewModel by lazy {
+        val context = applicationContext
+        val notesRepository = NotesRepository(AppDataBase(context)!!)
+        val viewModelProviderFactory =
+            CreatEditViewModelProvider(application, notesRepository, noteDataItemReceived!!)
+        ViewModelProvider(this, viewModelProviderFactory)[CreatEditViewModel::class.java]
+    }
+
+
     private lateinit var adaptor: EditAdaptor
-    private var noteItemReceived: NoteItem? = null
+    private var noteDataItemReceived: NoteDataItem? = null
     private var isFocused = false
     private lateinit var themeAdapter: ThemeAdaptor
-    private var imageTaken = false
-    private val takeImageResult = registerForActivityResult(TakePictureWithUriReturnContract()) { (isSuccess, imageUri) ->
-        if (isSuccess) {
-            /***
-             * we get the uri value
-             */
-            val filename = imageUri.getName(this)
-            addImageToList(filename?:"noNameError",imageUri)
-         }
-    }
-
-    private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let { /***
-         * we get the uri value
-         */
-            addImageToNote(uri)
+    private val takeImageResult =
+        registerForActivityResult(TakePictureWithUriReturnContract()) { (isSuccess, imageUri) ->
+            if (isSuccess) {
+                /***
+                 * we get the uri value
+                 */
+                val filename = imageUri.getName(this)
+                addImageToList(filename ?: "noNameError", imageUri)
+            }
         }
-    }
+
+    private val selectImageFromGalleryResult =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                /***
+                 * we get the uri value
+                 */
+                addImageToNote(uri)
+            }
+        }
     private lateinit var recorder: AndroidAudioRecorder
     private var isRecording: Boolean = false
-    private var currentRecordingItem: NoteSubItem? = null
+    private var currentRecordingItem: NoteSubDataItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         // set up view Binding
         viewBinding = ActivityCreatEditBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
+        setUpIntentDataItem()
         // get the note item passed
-        if (intent.hasExtra(NOTE_ITEM_LIST)) {
-            noteItemReceived = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(
-                    NOTE_ITEM_LIST,
-                    NoteItem::class.java
-                )
-
-            } else {
-                intent.getParcelableExtra(NOTE_ITEM_LIST)
-
-            }
-            if(noteItemReceived==null){
-                // ReInstall the App
-                finish()
-            }
-        } else {
-            // kill the activity if note item not found
-            finish()
-        }
-
-        setUpViewModel()
         setUpToolBar()
-        setUpViewData()
+        initialDataSetUp()
         setUpEditListAdaptor()
         setUpLiveData()
         setUpTitleData()
@@ -121,11 +112,37 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         setUpSoftInputButton()
         setUpSoftInputTextButtons()
         viewBinding.softInputAboutView.visibility = View.GONE
-        changeThemeInView(noteItemReceived!!.themeId)
+        changeThemeInView(noteDataItemReceived!!.themeId)
+    }
+
+    private fun initialDataSetUp() {
+        viewBinding.tvTime.text = ConstantValues.dateConvert(noteDataItemReceived!!.id)
+        setUpToolBar()
+    }
+
+    private fun setUpIntentDataItem() {
+        if (intent.hasExtra(NOTE_ITEM_LIST)) {
+            noteDataItemReceived = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(
+                    NOTE_ITEM_LIST,
+                    NoteDataItem::class.java
+                )
+
+            } else {
+                intent.getParcelableExtra(NOTE_ITEM_LIST)
+
+            }
+            if (noteDataItemReceived == null) {
+                finish()
+            }
+        } else {
+            // kill the activity if note item not found
+            finish()
+        }
     }
 
     private fun setUpThemeDataAndAdaptor() {
-        themeAdapter = ThemeAdaptor(noteItemReceived!!.themeId)
+        themeAdapter = ThemeAdaptor(noteDataItemReceived!!.themeId)
 
         viewBinding.listBackgroundTheme.adapter = themeAdapter
         viewBinding.listBackgroundTheme.layoutManager = LinearLayoutManager(
@@ -177,13 +194,13 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     private fun setUpSoftInputTextButtons() {
         viewBinding.btIncreaseSize.setOnClickListener {
             /***
-             * this will update the size of text by just send an trigger and the size parameters will be handled by holder itself
+             * update the size of text by just send an trigger and the size parameters will be handled by holder itself
              */
-                viewModel.increaseTextSize()
+            viewModel.increaseTextSize()
         }
         viewBinding.btDecreaseSize.setOnClickListener {
             /***
-             * this will update the size of text by just send an trigger and the size parameters will be handled by holder itself
+             * update the size of text by just send an trigger and the size parameters will be handled by holder itself
              */
             viewModel.decreaseTextSize()
 
@@ -199,11 +216,10 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             viewModel.changeCheckBoxVisibility()
         }
         viewBinding.btImage.setOnClickListener {
-            // TODO capture or get image and then save it to directory then add a new item
+
             val reminderDialog = object : ImageGetDialog(
                 this,
             ) {
-
                 override fun onItemDone(item: Int) {
                     when (item) {
                         0 -> {
@@ -234,23 +250,23 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
          * if visible then make them invisible and vice versa
          */
         viewBinding.btTextVisibility.setOnClickListener {
-             if(viewBinding.triggerButtonsText.visibility == View.VISIBLE){
-                 // hide
-                 hideTextChangeSoftInput()
-              }else{
-                  // show
-                 showTextChangeSoftInput()
-             }
+            if (viewBinding.triggerButtonsText.visibility == View.VISIBLE) {
+                // hide
+                hideTextChangeSoftInput()
+            } else {
+                // show
+                showTextChangeSoftInput()
+            }
         }
     }
 
-    private fun showTextChangeSoftInput(){
+    private fun showTextChangeSoftInput() {
         viewBinding.triggerButtonsText.visibility = View.VISIBLE
         viewBinding.btTextVisibility.setImageResource(R.drawable.baseline_clear_24)
         viewBinding.triggerButtons.visibility = View.GONE
     }
 
-    private fun hideTextChangeSoftInput(){
+    private fun hideTextChangeSoftInput() {
         viewBinding.triggerButtonsText.visibility = View.GONE
         viewBinding.btTextVisibility.setImageResource(R.drawable.baseline_format_size_24)
         viewBinding.triggerButtons.visibility = View.VISIBLE
@@ -293,7 +309,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                 viewBinding.audioRecordVisibility.visibility = View.VISIBLE
                 viewBinding.btAudio.setImageResource(R.drawable.baseline_stop_24)
                 recorder.start(audioFile)
-                currentRecordingItem = NoteSubItem(
+                currentRecordingItem = NoteSubDataItem(
                     focusPosition, NoteSubItemType.Audio, false, "", 18F, null, null, null,
                     fileName, audioFile.toUri().toString(), null
                 )
@@ -337,14 +353,14 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         takeImageNewWay()
     }
 
-    private fun takeImageNewWay(){
+    private fun takeImageNewWay() {
         val filename = getFileName()
         val fileUri = getNewFileUri(filename)
         takeImageResult.launch(fileUri)
     }
 
 
-    private fun addImageToList(photoId: String,imageUri:Uri) {
+    private fun addImageToList(photoId: String, imageUri: Uri) {
         onMenuDoneButtonClicked() // remove focus
 
         val focusPosition: Int =
@@ -361,13 +377,17 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             // something went wrong and we cant get the last focus position somehow
             return
         }
-            viewModel.addNewImageItemToList(photoId, imageUri, focusPosition)
+        viewModel.addNewImageItemToList(photoId, imageUri, focusPosition)
 
     }
 
-    private fun getNewFileUri(fileName:String):Uri {
-        val tmpFile = File(getExternalFilesDir("/")!!,"$fileName.png")
-        return FileProvider.getUriForFile(applicationContext, "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
+    private fun getNewFileUri(fileName: String): Uri {
+        val tmpFile = File(getExternalFilesDir("/")!!, "$fileName.png")
+        return FileProvider.getUriForFile(
+            applicationContext,
+            "${BuildConfig.APPLICATION_ID}.provider",
+            tmpFile
+        )
     }
 
 
@@ -375,11 +395,11 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         selectImageFromGalleryResult.launch("image/*")
     }
 
-    private fun addImageToNote(uri:Uri){
+    private fun addImageToNote(uri: Uri) {
         val filename = getFileName()
         val fileUri = getNewFileUri(filename)
-        copyFile(uri,fileUri)
-        addImageToList(filename,fileUri)
+        copyFile(uri, fileUri)
+        addImageToList(filename, fileUri)
     }
 
     @Throws(IOException::class)
@@ -403,7 +423,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             // set the text in viewModel
             viewModel.setTitle(it.toString())
         }
-        viewBinding.etTitle.setText(noteItemReceived!!.title)
+        viewBinding.etTitle.setText(noteDataItemReceived!!.title)
         viewBinding.etTitle.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 titleFocused()
@@ -464,14 +484,17 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
         viewModel.editItems.observe(this) {
             adaptor.differ.submitList(it)
+            viewModel
         }
 
         viewModel.checkBoxVisibilityEvent.observeEvent(this, adaptor::changeCheckVisibility)
 
-        viewModel.changeTextSizeEvent.observeEvent(this,adaptor::changeTextSize)
+        viewModel.changeTextSizeEvent.observeEvent(this, adaptor::changeTextSize)
     }
 
     private fun setUpEditListAdaptor() {
+
+
         adaptor = EditAdaptor(ConstantValues.themeList[0], viewModel)
         viewBinding.rvDescription.adapter = adaptor
 
@@ -485,22 +508,8 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
     }
 
-
     // setUp initial data to the view
-    private fun setUpViewData() {
 
-        viewBinding.tvTime.text = ConstantValues.dateConvert(noteItemReceived!!.id)
-
-    }
-
-
-    private fun setUpViewModel() {
-        val notesRepository = NotesRepository(NotesDataBase(this)!!)
-        val viewModelProviderFactory =
-            CreatEditViewModelProvider(application, notesRepository, noteItemReceived!!)
-        viewModel =
-            ViewModelProvider(this, viewModelProviderFactory)[CreatEditViewModel::class.java]
-    }
 
     private fun setUpToolBar() {
         setSupportActionBar(viewBinding.toolbar)
@@ -562,7 +571,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
     }
 
     private fun shareNoteText() {
-        // TODO Images not working for whats app
+
         val textValue = getAllTextData()
         val imageUris: ArrayList<Uri>? = getAllImageURiList()
 
@@ -575,7 +584,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             type = "*/*"
         }
 
-        val shareIntent = Intent.createChooser(sendIntent, "${imageUris?.size} sdf")
+        val shareIntent = Intent.createChooser(sendIntent, "${viewBinding.etTitle.text.toString()} note")
         startActivity(shareIntent)
     }
 
@@ -644,6 +653,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             }
         }
     }
+
     private fun requestMicPermission() {
         EasyPermissions.requestPermissions(
             this, "Audio Permission is required for recording audio",
@@ -662,6 +672,7 @@ class CreatEditActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             }
         }
     }
+
     private fun hasMicPermission() =
         EasyPermissions.hasPermissions(applicationContext, Manifest.permission.RECORD_AUDIO)
 

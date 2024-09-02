@@ -17,14 +17,44 @@ object Utils {
         return fileName
     }
 
-    fun getTimer(value:Int):String{
-         if (value < 10){
-            return "0:0$value"
-         }
-        if(value <60){
-            return "0:$value"
+    private fun getTimerSec(value: Int): String {
+        if (value < 10) {
+            return "0$value"
         }
+
         return "$value"
+
+    }
+
+    private fun getTimerSec(value: Long): String {
+        if (value < 10) {
+            return "0$value"
+        }
+
+        return "$value"
+
+    }
+
+    fun getTimer(value: Long): String {
+
+        if (value < 60) {
+            return "0:${getTimerSec(value)}"
+
+        }
+
+        return "${value / 60}:${getTimerSec(value % 60)}"
+
+    }
+
+    fun getTimer(value: Int): String {
+
+        if (value < 60) {
+            return "0:${getTimerSec(value)}"
+
+        }
+
+        return "${value / 60}:${getTimerSec(value % 60)}"
+
     }
 
     fun dateFormatterNotesList(date: String, currentTIme: String): String {
@@ -69,6 +99,6 @@ object Utils {
     const val GreyColor: String = "#656565"
     const val YellowColor: String = "#E5B00D"
 
-    val NOTE_ITEM_LIST = "NoteItemList"
+    const val NOTE_ITEM_LIST = "NoteItemList"
 
 }

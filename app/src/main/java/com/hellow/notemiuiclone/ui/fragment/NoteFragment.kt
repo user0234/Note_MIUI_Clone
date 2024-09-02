@@ -3,7 +3,6 @@ package com.hellow.notemiuiclone.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
 import com.hellow.notemiuiclone.databinding.FragmentNoteBinding
-import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
+import com.hellow.notemiuiclone.ui.editActivity.EditNoteActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
@@ -21,46 +20,19 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
 
     private lateinit var binding: FragmentNoteBinding
 
-    private lateinit var viewModel: MainActivityViewModel
-    lateinit var notesAdapter: NotesAdapter
-    private lateinit var notesAdapter1: NotesAdapter
-    private lateinit var rvNotes: RecyclerView
-    private lateinit var rvEmptyView: ConstraintLayout
+    private lateinit var notesAdapter: NotesAdapter
+    private val viewModel: MainActivityViewModel by lazy {
+        (activity as MainActivity).viewModel
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNoteBinding.bind(view)
+        setupData()
+        setUpRecyclerView(view)
+    }
 
-        viewModel = (activity as MainActivity).viewModel
-        rvNotes = view.findViewById(R.id.rv_note_list)
-        rvEmptyView = view.findViewById(R.id.empty_list_card)
-        setUpRecyclerView()
-
-        notesAdapter.setOnItemClickListener { note ->
-            // go to edit /create activity
-            val intent = Intent(view.context, CreatEditActivity::class.java)
-            intent.putExtra(NOTE_ITEM_LIST, note)
-            startActivity(intent)
-        }
-
-        viewModel.getNotes().observe(viewLifecycleOwner)
-        {
-            if (it.isNullOrEmpty()) {
-                rvNotes.visibility = View.GONE
-                rvEmptyView.visibility = View.VISIBLE
-            } else {
-                it.sortedBy { item ->
-                    item.recentChangeDate
-                }
-
-                notesAdapter1.notesDiffer.submitList(it.subList(0, 2))
-
-                notesAdapter.notesDiffer.submitList(it)
-                rvNotes.visibility = View.VISIBLE
-                rvEmptyView.visibility = View.GONE
-            }
-        }
-
+    private fun setUpTouchHelper(view: View) {
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or
                     ItemTouchHelper.RIGHT
@@ -70,7 +42,6 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder,
             ): Boolean {
-                val position = viewHolder.adapterPosition
                 viewHolder.itemView.clearFocus()
                 return false
             }
@@ -81,7 +52,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
 
                 if (direction == ItemTouchHelper.LEFT) {
                     viewModel.deleteNote(note)
-                    Snackbar.make(view, "deleted forever", Snackbar.LENGTH_LONG).apply {
+                    Snackbar.make(view, "deleted", Snackbar.LENGTH_LONG).apply {
                         setAction("StopDelete") {
                             viewModel.addNote(note)
                         }
@@ -89,8 +60,8 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
                     }
                 }
                 if (direction == ItemTouchHelper.RIGHT) {
-                    viewModel.archiveNote(note)
-                    Snackbar.make(view, "Note Archived", Snackbar.LENGTH_LONG).apply {
+                    viewModel.deleteNote(note)
+                    Snackbar.make(view, "deleted", Snackbar.LENGTH_LONG).apply {
                         setAction("Undo") {
                             viewModel.addNote(note)
                         }
@@ -103,21 +74,48 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         }
 
         ItemTouchHelper(itemTouchHelperCallBack).apply {
-            attachToRecyclerView(rvNotes)
+            attachToRecyclerView(binding.rvNoteList)
         }
     }
 
-    private fun setUpRecyclerView() {
-        notesAdapter = NotesAdapter()
-        rvNotes.adapter = notesAdapter
-        rvNotes.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        rvNotes.setHasFixedSize(false)
+    private fun setupData() {
+        binding.searchBarView.searchBarTv.text = "Search Notes"
 
-        notesAdapter1 = NotesAdapter()
-        binding.rvSearchResult.adapter = notesAdapter1
-        binding.rvSearchResult.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        binding.rvSearchResult.setHasFixedSize(false)
+        viewModel.getNotes().observe(viewLifecycleOwner)
+        { notesItem ->
+            if (notesItem.isNullOrEmpty()) {
+                binding.rvNoteList.visibility = View.GONE
+                binding.emptyListCard.visibility = View.VISIBLE
+            } else {
+
+                binding.rvNoteList.visibility = View.VISIBLE
+                binding.emptyListCard.visibility = View.GONE
+
+                notesItem.sortedBy { item ->
+                    item.recentChangeDate
+                }
+                notesAdapter.notesDiffer.submitList(notesItem)
+
+            }
+        }
+
+    }
+
+    private fun setUpRecyclerView(view: View) {
+        notesAdapter = NotesAdapter()
+        binding.rvNoteList.apply {
+            adapter = notesAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(false)
+        }
+        notesAdapter.setOnItemClickListener { note ->
+            // go to edit /create activity
+            val intent = Intent(view.context, EditNoteActivity::class.java)
+            intent.putExtra(NOTE_ITEM_LIST, note)
+            startActivity(intent)
+        }
+
+        setUpTouchHelper(view)
     }
 
 }

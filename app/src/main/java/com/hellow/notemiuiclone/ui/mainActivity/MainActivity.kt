@@ -13,10 +13,10 @@ import com.hellow.notemiuiclone.database.AppDataBase
 import com.hellow.notemiuiclone.databinding.ActivityMainBinding
 import com.hellow.notemiuiclone.dialogs.CreateReminderDialog
 import com.hellow.notemiuiclone.models.ReminderItem
-import com.hellow.notemiuiclone.models.noteModels.NoteItem
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
-import com.hellow.notemiuiclone.ui.editActivity.CreatEditActivity
+import com.hellow.notemiuiclone.ui.editActivity.EditNoteActivity
 import com.hellow.notemiuiclone.utils.Utils
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -26,15 +26,8 @@ import java.time.format.DateTimeFormatter
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityMainBinding
-    lateinit var viewModel: MainActivityViewModel
-    var isTabSelected: Boolean = true
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
-
-        val appDataBase = AppDataBase(this)!!
+    val viewModel: MainActivityViewModel by lazy {
+        val appDataBase = AppDataBase(applicationContext)!!
 
         val notesRepository = NotesRepository(appDataBase)
 
@@ -43,8 +36,16 @@ class MainActivity : AppCompatActivity() {
         val viewModelProviderFactory =
             MainViewModelProviderFactory(application, notesRepository, reminderRepository)
 
-        viewModel =
-            ViewModelProvider(this, viewModelProviderFactory)[MainActivityViewModel::class.java]
+        ViewModelProvider(this, viewModelProviderFactory)[MainActivityViewModel::class.java]
+    }
+    var isTabSelected: Boolean = true
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+
+
 
         viewModel.tabItemSelectedLiveData.observe(this) {
             isTabSelected = it
@@ -73,11 +74,12 @@ class MainActivity : AppCompatActivity() {
         viewBinding.fabCreate.setOnClickListener {
 
             if (viewBinding.viewPager.currentItem == 0) {
-                val intent = Intent(this, CreatEditActivity::class.java)
-                val noteId = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
-                val note = NoteItem(noteId, recentChangeDate = noteId)
+                val intent = Intent(this, EditNoteActivity::class.java)
+                val noteId = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm:ss a")).toString()
+                val note = NoteDataItem(noteId, recentChangeDate = noteId)
                 viewModel.addNote(note)
-                intent.putExtra(Utils.NOTE_ITEM_LIST,note)
+                intent.putExtra(Utils.NOTE_ITEM_LIST, note)
                 startActivity(intent)
             } else {
                 // create new reminder item using dialogue
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity,
 
             ) {
-            override fun onItemDone(item: ReminderItem?,time: LocalDateTime) {
+            override fun onItemDone(item: ReminderItem?, time: LocalDateTime) {
                 if (item != null) {
 
                     val startsTime = LocalDateTime.now()
@@ -106,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                         data = CalendarContract.Reminders.CONTENT_URI
                         putExtra(CalendarContract.Reminders.TITLE, title)
                         putExtra(CalendarContract.Reminders.ALL_DAY, false)
-                        putExtra(CalendarContract.EXTRA_EVENT_END_TIME, mEndTime )
+                        putExtra(CalendarContract.EXTRA_EVENT_END_TIME, mEndTime)
                         startActivity(intent)
                     }
                     // TODO set an alarm for that time

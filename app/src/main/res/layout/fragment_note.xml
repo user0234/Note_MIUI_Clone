@@ -8,39 +8,38 @@
     tools:context=".ui.fragment.NoteFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:background="@color/transparent"
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         android:elevation="5dp"
         android:fitsSystemWindows="true">
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:background="@color/transparent"
             style="?attr/collapsingToolbarLayoutMediumStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/transparent"
             android:fitsSystemWindows="true"
             android:overScrollMode="never"
-            app:title=" "
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            >
+            app:title=" ">
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                />
+                android:layout_height="0dp" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
-                android:background="@color/transparent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <com.google.android.material.search.SearchBar
-                    android:id="@+id/search_bar"
-                    android:background="@color/transparent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:background="@color/transparent">
+
+                <include
+                    android:id="@+id/searchBarView"
+                    layout="@layout/search_bar_layout"
+                    android:visibility="gone" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,23 +98,9 @@
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.search.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="Search tab"
-        app:layout_anchor="@id/search_bar">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_search_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginHorizontal="5dp"
-            android:background="@color/transparent"
-            android:visibility="visible"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/notes_list_item" />
-
-    </com.google.android.material.search.SearchView>
+    <!--    create an search bar with same dimensions in the activity and then when clicked open its values and animations
+              as an event
+    -->
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
