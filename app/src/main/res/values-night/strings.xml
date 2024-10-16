@@ -2,4 +2,8 @@
 <resources>
     <string name="setting_home_menu_item">Setting\n</string>
     <string name="add_new_item">add New Item</string>
+    <string name="sortItem">Sort By\n</string>
+    <string name="name">Name</string>
+    <string name="modification_time">Last Modification</string>
+    <string name="themes">Theme</string>
 </resources>

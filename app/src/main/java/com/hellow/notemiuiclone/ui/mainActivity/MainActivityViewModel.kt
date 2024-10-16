@@ -9,20 +9,23 @@ import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
 import com.hellow.notemiuiclone.models.ReminderItem
 import com.hellow.notemiuiclone.repository.notes.NotesRepository
 import com.hellow.notemiuiclone.repository.reminder.ReminderRepository
+import com.hellow.notemiuiclone.ui.editActivity.CreatEditViewModel.DescriptionText
+import com.hellow.notemiuiclone.utils.Event
+import com.hellow.notemiuiclone.utils.send
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
-    app:Application,
+    app: Application,
     private val notesRepository: NotesRepository,
     private val reminderRepository: ReminderRepository
-): AndroidViewModel(app)  {
+) : AndroidViewModel(app) {
 
-   private var _completeShownTasks = false
-    fun setCompleteShowInTasks(value: Boolean){
+    private var _completeShownTasks = false
+    fun setCompleteShowInTasks(value: Boolean) {
         _completeShownTasks = value
     }
 
-    fun getCompleteShowInTasks():Boolean {
+    fun getCompleteShowInTasks(): Boolean {
         return _completeShownTasks
     }
 
@@ -30,8 +33,16 @@ class MainActivityViewModel(
     val tabItemSelectedLiveData: LiveData<Boolean>
         get() = _tabItemSelected
 
-    fun setTabItem(value:Boolean){
-        _tabItemSelected.value = value
+    // open settings fragment
+
+
+    private val _openSettingsFragment = MutableLiveData<Event<Boolean>>()
+    val handelOpenSettingsFragment: LiveData<Event<Boolean>>
+        get() = _openSettingsFragment
+
+    fun openSettingsFragment() {
+        _openSettingsFragment.send(true)
+
     }
 
 
@@ -42,26 +53,27 @@ class MainActivityViewModel(
     fun getNotes() = notesRepository.getNotes()
 
     fun deleteNote(note: NoteDataItem) {
-       // note.noteStatus = NoteStatus.Deleted
+        // note.noteStatus = NoteStatus.Deleted
         viewModelScope.launch {
             notesRepository.deleteNote(note)
         }
     }
 
     fun archiveNote(note: NoteDataItem) {
-         viewModelScope.launch {
+        viewModelScope.launch {
             notesRepository.updateNote(note)
         }
     }
-    fun createNewReminder(reminder:ReminderItem) {
+
+    fun createNewReminder(reminder: ReminderItem) {
         viewModelScope.launch {
 
             reminderRepository.addReminder(reminder)
         }
     }
 
-    fun updateReminder(reminder:ReminderItem) {
-        viewModelScope.launch{
+    fun updateReminder(reminder: ReminderItem) {
+        viewModelScope.launch {
             reminderRepository.updateReminder(reminder)
         }
     }
@@ -77,4 +89,5 @@ class MainActivityViewModel(
     fun getInCompleterReminders() = reminderRepository.getUnCompletedReminders()
 
     fun getAllReminder() = reminderRepository.getAllTheReminder()
+
 }

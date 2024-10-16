@@ -11,10 +11,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.adapter.NotesAdapter
 import com.hellow.notemiuiclone.databinding.FragmentNoteBinding
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
 import com.hellow.notemiuiclone.ui.editActivity.EditNoteActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
+import com.hellow.notemiuiclone.utils.sharedPref.SharedPrefFunctions.getSharedPrefNotesSort
 
 class NoteFragment : Fragment(R.layout.fragment_note) {
 
@@ -30,6 +32,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         binding = FragmentNoteBinding.bind(view)
         setupData()
         setUpRecyclerView(view)
+
     }
 
     private fun setUpTouchHelper(view: View) {
@@ -78,25 +81,55 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         }
     }
 
+    private fun handleNotesData(notesItem: List<NoteDataItem>?): List<NoteDataItem>? {
+        if (notesItem.isNullOrEmpty()) {
+            binding.rvNoteList.visibility = View.GONE
+            binding.emptyListCard.visibility = View.VISIBLE
+            return null
+        } else {
+
+            val sortBy = getSharedPrefNotesSort(requireContext())
+
+            binding.rvNoteList.visibility = View.VISIBLE
+            binding.emptyListCard.visibility = View.GONE
+
+            return when (sortBy) {
+
+                0 -> {
+
+                    notesItem.sortedBy { item ->
+                        item.title
+                    }
+                }
+
+                1 -> {
+
+                    notesItem.sortedBy { item ->
+                        item.recentChangeDate
+                    }
+                }
+
+                else -> {
+
+                    notesItem.sortedBy { item ->
+                        item.id
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
     private fun setupData() {
         binding.searchBarView.searchBarTv.text = "Search Notes"
 
         viewModel.getNotes().observe(viewLifecycleOwner)
         { notesItem ->
-            if (notesItem.isNullOrEmpty()) {
-                binding.rvNoteList.visibility = View.GONE
-                binding.emptyListCard.visibility = View.VISIBLE
-            } else {
 
-                binding.rvNoteList.visibility = View.VISIBLE
-                binding.emptyListCard.visibility = View.GONE
+            notesAdapter.notesDiffer.submitList(handleNotesData(notesItem))
 
-                notesItem.sortedBy { item ->
-                    item.recentChangeDate
-                }
-                notesAdapter.notesDiffer.submitList(notesItem)
-
-            }
         }
 
     }

@@ -102,5 +102,12 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="search_tab">Search tab</string>
+    <string name="sortItem">Sort By\n</string>
+    <string name="name">Name</string>
+    <string name="modification_time">Last Modification</string>
+    <string name="themes">Theme</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Setting</string>
 
 </resources>

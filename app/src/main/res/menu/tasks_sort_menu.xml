@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sortBt"
+        android:contentDescription="@string/setting_home_menu_item"
+        android:icon="@drawable/ic_filter_black"
+        android:title="@string/sortItem"
+        app:showAsAction="always"  >
+
+        <menu
+            >
+            <item
+                android:id="@+id/btSortName"
+                android:title="@string/name" />
+            <item
+                android:id="@+id/btSortTime"
+                android:title="@string/modification_time" />
+        </menu>
+
+
+    </item>
+</menu>

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.hellow.notemiuiclone.models.noteModels.NoteDataItem
 import com.hellow.notemiuiclone.ui.fragment.NoteFragment
 import com.hellow.notemiuiclone.ui.fragment.TaskFragment
 
@@ -13,17 +14,20 @@ class NoteTabAdaptor(
     private var totalTabs: Int,
 ) : FragmentStateAdapter(fragmentActivity) {
 
-
     override fun getItemCount(): Int {
         return totalTabs
     }
 
     // this is for fragment tabs
     override fun createFragment(position: Int): Fragment {
+
+
+
         return when (position) {
             0 -> {
 
                 NoteFragment()
+
             }
 
             1 -> {
@@ -35,4 +39,13 @@ class NoteTabAdaptor(
             }
         }
     }
+
+
+    private var onTabSelectedListener: ((Int) -> Unit)? = null
+
+    fun setOnSelectedListener(listener: (Int) -> Unit) {
+        onTabSelectedListener = listener
+    }
+
+
 }

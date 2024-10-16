@@ -2,6 +2,7 @@ package com.hellow.notemiuiclone.utils
 
 import android.view.View
 import android.content.Context
+import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 /**
  * Try to hide the keyboard from [this] view.
@@ -24,3 +25,26 @@ fun View.showKeyboard(delay: Long = 200L) {
         imm.showSoftInput(focus, 0)
     }, delay)
 }
+
+/**
+ *
+ * convert the given dp to pixels
+ *
+ */
+
+fun Context.toDip(dp: Int): Float = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    dp.toFloat(),
+    resources.displayMetrics)
+
+
+/**
+ *
+ * convert the given sp to pixels
+ *
+ */
+
+fun Context.toSip(sp: Int): Float = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_SP,
+    sp.toFloat(),
+    resources.displayMetrics)
