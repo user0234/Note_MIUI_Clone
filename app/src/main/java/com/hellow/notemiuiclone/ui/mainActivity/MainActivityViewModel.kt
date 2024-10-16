@@ -35,16 +35,33 @@ class MainActivityViewModel(
 
     // open settings fragment
 
-
     private val _openSettingsFragment = MutableLiveData<Event<Boolean>>()
     val handelOpenSettingsFragment: LiveData<Event<Boolean>>
         get() = _openSettingsFragment
 
     fun openSettingsFragment() {
         _openSettingsFragment.send(true)
-
     }
 
+    // trigger sort saved pref event
+
+    private val _triggerSharedPrefSortEvent = MutableLiveData<Event<Boolean>>()
+    val handelSharedPrefSortEvent: LiveData<Event<Boolean>>
+        get() = _triggerSharedPrefSortEvent
+
+    fun triggerSharedPrefSortEvent() {
+        _triggerSharedPrefSortEvent.send(true)
+    }
+
+    // trigger layoutChange saved pref event
+
+    private val _triggerSharedPrefLayoutEvent = MutableLiveData<Event<Boolean>>()
+    val handelSharedPrefLayoutEvent: LiveData<Event<Boolean>>
+        get() = _triggerSharedPrefLayoutEvent
+
+    fun triggerSharedPrefLayoutEvent() {
+        _triggerSharedPrefLayoutEvent.send(true)
+    }
 
     fun addNote(note: NoteDataItem) = viewModelScope.launch {
         notesRepository.createNote(note)

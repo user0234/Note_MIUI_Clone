@@ -1,11 +1,14 @@
 package com.hellow.notemiuiclone.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.hellow.notemiuiclone.R
 import com.hellow.notemiuiclone.databinding.FragmentSettingsBinding
+import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
+import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.sharedPref.settings.LayoutTypeEnum
 import com.hellow.notemiuiclone.utils.sharedPref.settings.SettingsSharedPref.getSharedPrefNotesLayout
 import com.hellow.notemiuiclone.utils.sharedPref.settings.SettingsSharedPref.getSharedPrefNotesSort
@@ -19,6 +22,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private lateinit var binding: FragmentSettingsBinding
 
+
+    private val viewModel: MainActivityViewModel by lazy {
+
+        (activity as MainActivity).viewModel
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,6 +70,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         val currentPosSet = getSharedPrefNotesSort(requireActivity())
+        Log.i("sortSharedPref", "shared pref value - ${currentPosSet.name}")
 
         when (currentPosSet) {
             SortTypeEnum.Name -> binding.sortByRadioGroup.check(name.id)
@@ -69,21 +78,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             SortTypeEnum.Modification -> binding.sortByRadioGroup.check(modificationDate.id)
         }
 
+
         binding.sortByRadioGroup.setOnCheckedChangeListener { _, pos ->
+            Log.i("sortSharedPref", "current selected position - ${pos}")
 
             when (pos) {
-                0 -> {
+                name.id -> {
                     updateSharedPrefNotesSort(requireContext(), SortTypeEnum.Name)
                 }
 
-                1 -> {
+                createdDate.id -> {
                     updateSharedPrefNotesSort(requireContext(), SortTypeEnum.Creation)
                 }
 
-                2 -> {
+                modificationDate.id -> {
                     updateSharedPrefNotesSort(requireContext(), SortTypeEnum.Modification)
                 }
             }
+
+            viewModel.triggerSharedPrefSortEvent()
 
         }
     }
@@ -117,12 +130,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         binding.layoutRadioGroup.setOnCheckedChangeListener { _, pos ->
+            viewModel.triggerSharedPrefLayoutEvent()
 
             when (pos) {
-                0 -> {
+                list.id -> {
                     updateSharedPrefNotesLayout(requireContext(), LayoutTypeEnum.List)
                 }
-                1 -> {
+
+                grid.id -> {
                     updateSharedPrefNotesLayout(requireContext(), LayoutTypeEnum.Grid)
                 }
             }

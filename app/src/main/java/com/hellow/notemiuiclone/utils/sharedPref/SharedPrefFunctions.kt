@@ -19,5 +19,4 @@ object SharedPrefFunctions {
         sharedPref.edit().putInt(key, value).apply()
     }
 
-
 }

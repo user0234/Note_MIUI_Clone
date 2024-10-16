@@ -2,6 +2,7 @@ package com.hellow.notemiuiclone.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,7 +17,9 @@ import com.hellow.notemiuiclone.ui.editActivity.EditNoteActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivity
 import com.hellow.notemiuiclone.ui.mainActivity.MainActivityViewModel
 import com.hellow.notemiuiclone.utils.Utils.NOTE_ITEM_LIST
-import com.hellow.notemiuiclone.utils.sharedPref.SharedPrefFunctions.getSharedPrefNotesSort
+import com.hellow.notemiuiclone.utils.observeEvent
+import com.hellow.notemiuiclone.utils.sharedPref.settings.SettingsSharedPref.getSharedPrefNotesSort
+import com.hellow.notemiuiclone.utils.sharedPref.settings.SortTypeEnum
 
 class NoteFragment : Fragment(R.layout.fragment_note) {
 
@@ -32,7 +35,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
         binding = FragmentNoteBinding.bind(view)
         setupData()
         setUpRecyclerView(view)
-
+        setUpSharedPrefEvent()
     }
 
     private fun setUpTouchHelper(view: View) {
@@ -82,6 +85,7 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
     }
 
     private fun handleNotesData(notesItem: List<NoteDataItem>?): List<NoteDataItem>? {
+
         if (notesItem.isNullOrEmpty()) {
             binding.rvNoteList.visibility = View.GONE
             binding.emptyListCard.visibility = View.VISIBLE
@@ -95,24 +99,24 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
 
             return when (sortBy) {
 
-                0 -> {
+                SortTypeEnum.Name -> {
 
                     notesItem.sortedBy { item ->
                         item.title
                     }
                 }
 
-                1 -> {
-
-                    notesItem.sortedBy { item ->
-                        item.recentChangeDate
-                    }
-                }
-
-                else -> {
+                SortTypeEnum.Creation -> {
 
                     notesItem.sortedBy { item ->
                         item.id
+                    }
+                }
+
+                SortTypeEnum.Modification -> {
+
+                    notesItem.sortedBy { item ->
+                        item.recentChangeDate
                     }
                 }
 
@@ -120,6 +124,22 @@ class NoteFragment : Fragment(R.layout.fragment_note) {
 
         }
 
+    }
+
+    private fun setUpSharedPrefEvent() {
+        viewModel.handelSharedPrefLayoutEvent.observeEvent(this) {
+
+        }
+
+        viewModel.handelSharedPrefSortEvent.observeEvent(this) {
+
+            Log.i(
+                "sortSharedPref",
+                "event triggered list size - ${notesAdapter.notesDiffer.currentList.size}"
+            )
+            notesAdapter.notesDiffer.submitList(handleNotesData(notesAdapter.notesDiffer.currentList))
+
+        }
     }
 
     private fun setupData() {
